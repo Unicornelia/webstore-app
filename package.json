@@ -3,10 +3,19 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "K",
   "license": "ISC",
-  "description": ""
+  "description": "https://www.udemy.com/course/nodejs-the-complete-guide/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Unicornelia/node-project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Unicornelia/node-project/issues"
+  },
+  "homepage": "https://github.com/Unicornelia/node-project#readme"
 }
