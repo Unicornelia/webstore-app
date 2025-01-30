@@ -17,10 +17,17 @@ const requestHandler = (req, res) => {
 			'</body>');
 		res.write('</html>');
 		return res.end();
-	}
-
-
-	if (url === '/create-user' && method === 'POST') {
+	} else if (url === '/users') {
+		res.write('<!DOCTYPE html>');
+		res.write('<html lang="en">');
+		res.write('<head><title>List of users</title></head>');
+		res.write('<body>' +
+			'<h2>Our existing users</h2>' +
+			'<ul><li>Jane</li><li>Mary</li><li>Lisa</li></ul>' +
+			'</body>');
+		res.write('</html>');
+		return res.end();
+	} else if (url === '/create-user' && method === 'POST') {
 		const body = [];
 		req.on('data', (chunk) => {
 			body.push(chunk);
@@ -35,18 +42,6 @@ const requestHandler = (req, res) => {
 				return res.end();
 			});
 		});
-	}
-
-	if (url === '/users') {
-		res.write('<!DOCTYPE html>');
-		res.write('<html lang="en">');
-		res.write('<head><title>List of users</title></head>');
-		res.write('<body>' +
-			'<h2>Our existing users</h2>' +
-			'<ul><li>Jane</li><li>Mary</li><li>Lisa</li></ul>' +
-			'</body>');
-		res.write('</html>');
-		return res.end();
 	}
 }
 
