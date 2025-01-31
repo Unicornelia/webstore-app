@@ -3,19 +3,16 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/add-greeting', (req, res, next) => {
-	res.send('<form action="/greeting" method="post"><input type="text" name="title"><button type="submit">Add Greeting</button></form>');
-});
+app.use(adminRoutes);
+app.use(shopRoutes);
 
-app.post('/greeting', (req, res, next) => {
-	console.log(req.body);
-	res.redirect('/');
-});
-
-app.get('/', (req, res, next) => {
-	res.send('<h1>Welcome!</h1>');
+app.use((req, res, next) => {
+	res.status(404).send('<h1>Page not found</h1>');
 });
 
 app.listen(3000);
