@@ -1,0 +1,14 @@
+{
+	"trailingComma": "es6",
+	"tabWidth": 4,
+	"semi": false,
+	"singleQuote": true,
+	"overrides": [
+		{
+			"files": "*.js",
+			"options": {
+				"parser": "flow"
+			}
+		}
+	]
+}
