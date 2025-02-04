@@ -4,20 +4,24 @@
     margin: 0 auto;
 }
 
-.product-form-control {
-    margin: 1rem 0;
+.product-item {
+    width: 20rem;
+    max-width: 95%;
 }
 
-.product-form-control label,
-.product-form-control input {
-    display: block;
-    width: 100%;
+.product__title {
+    font-size: 1.2rem;
+    text-align: center;
 }
 
-.product-form-control input {
-    font: inherit;
-    border: 1px solid #2a856e;
-    border-radius: 4px;
+.product__price {
+    text-align: center;
+    color: #4d4d4d;
+    margin-bottom: 0.5rem;
+}
+
+.product__description {
+    text-align: center;
 }
 
 button {
