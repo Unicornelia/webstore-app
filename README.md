@@ -15,4 +15,4 @@ Node refresher course that includes among many things:
 
 (The repo follows the technical tasks in the course)
 
-![](demo-webpage.gif)
+![](https://github.com/Unicornelia/node-project/demo-webpage.gif)
