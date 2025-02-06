@@ -14,3 +14,5 @@ Node refresher course that includes among many things:
 - Deno
 
 (The repo follows the technical tasks in the course)
+
+![](demo-webpage.gif)
