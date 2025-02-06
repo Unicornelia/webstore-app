@@ -4,7 +4,14 @@ const path = require('path')
 const router = express.Router()
 
 const rootDir = require('../util/path')
-const { getAddProduct, postAddProduct } = require('../controllers/products')
+const {
+  getAddProduct,
+  postAddProduct,
+  getProducts,
+} = require('../controllers/admin')
+
+// /admin/products => GET
+router.get('/products', getProducts)
 
 // /admin/add-product => GET
 router.get('/add-product', getAddProduct)
