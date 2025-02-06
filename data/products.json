@@ -1,10 +1,1 @@
-[
-  { "title": "Small book" },
-  { "title": "Magazine" },
-  { "title": "Booklet" },
-  { "title": "Mini Leaflet" },
-  { "title": "News" },
-  { "title": "Mini book" },
-  { "title": "Paper" },
-  { "title": "Coding book" }
-]
+[{"title":"Gloves","imageUrl":"https://images.unsplash.com/photo-1617118602199-d3c05ae37ed8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D","description":"Red gloves","price":"15"},{"title":"Book","imageUrl":"https://publicdomainpictures.net/pictures/10000/velka/1-1210009435EGmE.jpg","description":"A new edition of the dictionary","price":"7.39"}]
