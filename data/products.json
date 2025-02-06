@@ -1,1 +1,10 @@
-[{"title":"Small book"},{"title":"Magazine"},{"title":"Booklet"},{"title":"Mini Leaflet"},{"title":"News"},{"title":"Mini book"},{"title":"Paper"}]
+[
+  { "title": "Small book" },
+  { "title": "Magazine" },
+  { "title": "Booklet" },
+  { "title": "Mini Leaflet" },
+  { "title": "News" },
+  { "title": "Mini book" },
+  { "title": "Paper" },
+  { "title": "Coding book" }
+]
