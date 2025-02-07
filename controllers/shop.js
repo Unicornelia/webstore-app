@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 exports.getIndex = (req, res, next) => {
   Product.fetchAll((products) => {
     res.render('shop/index', {
-      prods: products,
+      products,
       pageTitle: 'Shop',
       path: '/',
     });
@@ -14,7 +14,7 @@ exports.getIndex = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
     res.render('shop/product-list', {
-      prods: products,
+      products,
       pageTitle: 'All Products',
       path: '/products',
     });
