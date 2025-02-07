@@ -24,9 +24,12 @@ exports.getProducts = (req, res, next) => {
 exports.getProductDetail = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId, (product) => {
-    console.log(product);
+    res.render('shop/product-detail', {
+      product,
+      pageTitle: 'Product Detail',
+      path: '/product-detail',
+    });
   });
-  res.redirect('/');
 };
 
 exports.getCart = (req, res, next) => {
