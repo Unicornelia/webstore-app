@@ -1,8 +1,9 @@
 .product-form {
   width: 20rem;
   max-width: 90%;
-  margin: auto;
+  margin: 0 auto;
   display: block;
+  text-align: end;
 }
 
 .product-item {
