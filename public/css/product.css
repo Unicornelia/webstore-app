@@ -26,3 +26,13 @@
 .product__description {
   text-align: center;
 }
+
+.product__image {
+  max-width: 50%;
+  justify-self: center;
+}
+
+.product__image img {
+  text-align: center;
+  max-width: 70%;
+}
