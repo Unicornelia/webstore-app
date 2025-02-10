@@ -1,5 +1,6 @@
 const adminData = require('../routes/admin');
 const Product = require('../models/Product');
+const Cart = require('../models/Cart');
 
 exports.getIndex = (req, res, next) => {
   Product.fetchAll((products) => {
@@ -30,6 +31,14 @@ exports.getProductDetail = (req, res, next) => {
       path: '/products',
     });
   });
+};
+
+exports.postCart = (req, res, next) => {
+  const prodId = req.body.productId;
+  Product.findById(prodId, (product) => {
+    Cart.addProduct(prodId, product.price);
+  });
+  res.redirect(`/cart`);
 };
 
 exports.getCart = (req, res, next) => {
