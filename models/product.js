@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const Cart = require('./cart');
+
 const p = path.join(
   path.dirname(process.mainModule.filename),
   'data',
@@ -10,7 +12,7 @@ const p = path.join(
 const getProductsFromFile = (cb) => {
   fs.readFile(p, 'utf8', (err, data) => {
     if (err) {
-      console.log(`Error in reading from file: ${err}`);
+      console.log(`Error in reading from file while getting products: ${err}`);
       cb([]);
     } else {
       cb(JSON.parse(data));
@@ -42,9 +44,23 @@ module.exports = class Product {
         this.id = Math.random().toString();
         products.push(this);
         fs.writeFile(p, JSON.stringify(products), (err) => {
-          console.log(`Error in writing to file: ${err}`);
+          console.log(`Error in writing to file while saving: ${err}`);
         });
       }
+    });
+  }
+
+  static deleteById(id) {
+    getProductsFromFile((products) => {
+      const product = products.find((product) => product.id === id);
+      const updatedProducts = products.filter((p) => p.id !== id);
+      fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+        if (!err) {
+          // remove from cart too
+          Cart.deleteProduct(id, product.price);
+        }
+        console.log(`Error in writing to file while deleting: ${err}`);
+      });
     });
   }
 
