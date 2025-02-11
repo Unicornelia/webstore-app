@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const res = require('express/lib/response');
 
 const p = path.join(
   path.dirname(process.mainModule.filename),
@@ -46,10 +47,11 @@ module.exports = class Cart {
       if (err) {
         return console.log(err);
       }
-
       const updatedCart = { ...JSON.parse(data) };
-
       const product = updatedCart.products.find((product) => product.id === id);
+      if (!product) {
+        return;
+      }
       updatedCart.products = updatedCart.products.filter(
         (product) => product.id !== id
       );
