@@ -9,3 +9,4 @@ package-lock.json
 /dataSources/
 /dataSources.local.xml
 /.idea
+.env
