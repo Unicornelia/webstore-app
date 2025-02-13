@@ -2,10 +2,10 @@ const Product = require('../models/Product');
 const Cart = require('../models/Cart');
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows]) => {
+  Product.findAll()
+    .then((products) => {
       res.render('shop/index', {
-        products: rows,
+        products,
         pageTitle: 'Shop',
         path: '/',
       });
@@ -14,10 +14,10 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows]) => {
+  Product.findAll()
+    .then((products) => {
       res.render('shop/product-list', {
-        products: rows,
+        products,
         pageTitle: 'All Products',
         path: '/products',
       });
@@ -27,11 +27,11 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProductDetail = (req, res, next) => {
   const { productId } = req.params;
-  Product.findById(productId)
-    .then(([[product]]) => {
+  Product.findByPk(productId)
+    .then((product) => {
       res.render('shop/product-detail', {
         product,
-        pageTitle: product.title,
+        pageTitle: product.dataValues.title,
         path: '/products',
       });
     })
@@ -40,7 +40,7 @@ exports.getProductDetail = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
   Cart.getCart((cart) => {
-    Product.fetchAll((products) => {
+    Product.findAll().then((products) => {
       const cartProducts = [];
       for (let product of products) {
         const cartProductData = cart.products.find((p) => p.id === product.id);
@@ -62,18 +62,22 @@ exports.getCart = (req, res, next) => {
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findById(prodId, (product) => {
-    Cart.addProduct(prodId, product.price);
-  });
-  res.redirect(`/cart`);
+  Product.findByPk(prodId)
+    .then((product) => {
+      Cart.addProduct(prodId, product.price);
+      res.redirect(`/cart`);
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postCartDeleteItem = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findById(prodId, (product) => {
-    Cart.deleteProduct(prodId, product.price);
-    res.redirect(`/cart`);
-  });
+  Product.findByPk(prodId)
+    .then((product) => {
+      Cart.deleteProduct(prodId, product.price);
+      res.redirect(`/cart`);
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getOrders = (req, res, next) => {
