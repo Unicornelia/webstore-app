@@ -22,11 +22,9 @@ app.use(errorController.get404Page);
 
 sequelize
   .sync()
-  .then((result) => {
-    console.log(result);
+  .then(() => {
+    app.listen(3000);
   })
   .catch((err) => {
     console.log(err);
   });
-
-app.listen(3000);
