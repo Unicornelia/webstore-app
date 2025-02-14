@@ -26,6 +26,10 @@ const Product = sequelize.define('product', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  userId: {
+    type: Sequelize.INTEGER,
+    foreignKey: true,
+  },
 });
 
 module.exports = Product;
