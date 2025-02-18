@@ -1,5 +1,4 @@
 const Product = require('../models/Product');
-const Cart = require('../models/Cart');
 
 exports.getIndex = (req, res, next) => {
   Product.findAll()
@@ -108,11 +107,50 @@ exports.postCartDeleteItem = (req, res, next) => {
     .catch((err) => console.error(`Error in postCartDeleteItem: ${err}`));
 };
 
+exports.postOrder = (req, res, next) => {
+  let fetchedCart;
+  req.user
+    .getCart()
+    .then((cart) => {
+      fetchedCart = cart;
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return req.user
+        .createOrder()
+        .then((order) => {
+          return order.addProducts(
+            products.map((product) => {
+              product.orderItem = { quantity: product.cartItem.quantity };
+              return product;
+            })
+          );
+        })
+        .catch((err) =>
+          console.error(`Error in add products to order: ${err}`)
+        );
+    })
+    .then((result) => {
+      fetchedCart.setProducts(null);
+    })
+    .then((result) => res.redirect('/orders'))
+    .catch((err) => console.error(`Error in postOrder: ${err}`));
+};
+
 exports.getOrders = (req, res, next) => {
-  res.render('shop/orders', {
-    pageTitle: 'Your Orders',
-    path: '/orders',
-  });
+  req.user
+    // eager loading
+    .getOrders({ include: ['products'] })
+    .then((orders) => {
+      res.render('shop/orders', {
+        pageTitle: 'Your Orders',
+        path: '/orders',
+        orders,
+      });
+    })
+    .catch((err) => {
+      console.error(`Error in getOrders: ${err}`);
+    });
 };
 
 exports.getCheckout = (req, res, next) => {
