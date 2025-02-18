@@ -10,7 +10,7 @@ exports.getIndex = (req, res, next) => {
         path: '/',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(`Error in index: ${err}`));
 };
 
 exports.getProducts = (req, res, next) => {
@@ -22,7 +22,7 @@ exports.getProducts = (req, res, next) => {
         path: '/products',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(`Error in getProducts: ${err}`));
 };
 
 exports.getProductDetail = (req, res, next) => {
@@ -35,7 +35,7 @@ exports.getProductDetail = (req, res, next) => {
         path: '/products',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(`Error in postProductDetail: ${err}`));
 };
 
 exports.getCart = (req, res, next) => {
@@ -51,9 +51,11 @@ exports.getCart = (req, res, next) => {
             products,
           });
         })
-        .catch((err) => console.log(err));
+        .catch((err) =>
+          console.error(`Error in getProducts from cart: ${err}`)
+        );
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(`Error in getCart: ${err}`));
 };
 
 exports.postCart = (req, res, next) => {

@@ -53,7 +53,9 @@ Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
   .authenticate()
-  .then(() => console.log('🔌Connection has been established successfully.'))
+  .then(() =>
+    console.info('🔌 Connection has been established successfully. 🔌')
+  )
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
   });
@@ -75,9 +77,9 @@ sequelize
   })
   .then((cart) => {
     app.listen(PORT, () => {
-      console.log(`Sever listening at port ${PORT}`);
+      console.log(`📡 Sever listening at port ${PORT} 📡`);
     });
   })
   .catch((err) => {
-    console.log(err);
+    console.error(err);
   });

@@ -20,7 +20,7 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect('/admin/products');
     })
     .catch((err) => {
-      console.log(err);
+      console.error(`Error in postAddProduct: ${err}`);
     });
 };
 
@@ -45,7 +45,7 @@ exports.getEditProduct = (req, res, next) => {
         product,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(`Error in getEditProduct: ${err}`));
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -65,10 +65,10 @@ exports.postEditProduct = (req, res, next) => {
       return product.save();
     })
     .then((result) => {
-      console.log(`Updated product: ${result}`);
+      console.info(`Updated product: ${result}`);
       res.redirect('/admin/products');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(`Error in postEditProduct: ${err}`));
 };
 
 exports.getProducts = (req, res, next) => {
@@ -81,7 +81,7 @@ exports.getProducts = (req, res, next) => {
         path: '/admin/products',
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(`Error in getProducts: ${err}`));
 };
 
 exports.postDeleteProduct = (req, res, next) => {
@@ -91,5 +91,5 @@ exports.postDeleteProduct = (req, res, next) => {
       console.log(`${r} has been deleted`);
       res.redirect('/admin/products');
     })
-    .catch(console.error);
+    .catch((err) => console.error(`Error in postDeleteProduct: ${err}`));
 };
