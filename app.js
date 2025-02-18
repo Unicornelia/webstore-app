@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { styleText } = require('node:util');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -59,10 +60,17 @@ Order.belongsToMany(Product, { through: OrderItem });
 sequelize
   .authenticate()
   .then(() =>
-    console.info('🔌 Connection has been established successfully. 🔌')
+    console.info(
+      styleText(
+        'cyanBright',
+        '🔌 Connection has been established successfully. 🔌'
+      )
+    )
   )
   .catch((error) => {
-    console.error('Unable to connect to the database:', error);
+    console.error(
+      styleText('red', `Unable to connect to the database:, ${error}`)
+    );
   });
 
 sequelize
@@ -82,9 +90,11 @@ sequelize
   })
   .then((cart) => {
     app.listen(PORT, () => {
-      console.log(`📡 Sever listening at port ${PORT} 📡`);
+      console.info(
+        styleText('greenBright', `📡 Sever listening at port ${PORT} 📡`)
+      );
     });
   })
   .catch((err) => {
-    console.error(err);
+    console.error(styleText('red', `Error in App:, ${err}`));
   });
