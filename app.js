@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -7,8 +8,11 @@ const sequelize = require('./config/connection');
 
 const Product = require('./models/product');
 const User = require('./models/user');
+const Cart = require('./models/cart');
+const CartItem = require('./models/cart-item');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -29,36 +33,50 @@ app.use((req, res, next) => {
       next();
     })
     .catch((err) => {
-      console.log(err);
+      console.error(`Error in find user by id: 1 => ${err}`);
     });
 });
 
-app.use('/admin/', adminRoutes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 app.use(errorController.get404Page);
 
 Product.belongsTo(User, {
-  foreignKey: 'userId',
-  onDelete: 'CASCADE',
   constraints: true,
+  onDelete: 'CASCADE',
 });
-
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
+  .authenticate()
+  .then(() => console.log('🔌Connection has been established successfully.'))
+  .catch((error) => {
+    console.error('Unable to connect to the database:', error);
+  });
+
+sequelize
+  // .sync({ force: true })
   .sync()
-  .then(() => {
+  .then((result) => {
     return User.findByPk(1);
   })
   .then((user) => {
     if (!user) {
       return User.create({ name: 'Admin', email: 'admin@email.com' });
     }
-    return Promise.resolve(user);
+    return user;
   })
   .then((user) => {
-    console.log(user, '***User***');
-    app.listen(3000);
+    return user.createCart();
+  })
+  .then((cart) => {
+    app.listen(PORT, () => {
+      console.log(`Sever listening at port ${PORT}`);
+    });
   })
   .catch((err) => {
     console.log(err);
