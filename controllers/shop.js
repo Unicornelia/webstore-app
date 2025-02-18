@@ -81,25 +81,31 @@ exports.postCart = (req, res, next) => {
       return Product.findByPk(productId);
     })
     .then((product) => {
-      return fetchedCart.addProduct(product, {
+      return fetchedCart.addProduct([product.id], {
         through: { quantity: newQuantity },
       });
     })
-    .catch((err) => console.log(`Error before redirect to cart: ${err.stack}`))
     .then(() => {
       res.redirect('/cart');
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(`Error in postCart: ${err}`));
 };
 
 exports.postCartDeleteItem = (req, res, next) => {
   const { productId } = req.body;
-  Product.findByPk(productId)
-    .then((product) => {
-      Cart.deleteProduct(productId, product.price);
-      res.redirect(`/cart`);
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts({ where: { id: productId } });
     })
-    .catch((err) => console.log(err));
+    .then((products) => {
+      const product = products[0];
+      return product.cartItem.destroy();
+    })
+    .then((result) => {
+      res.redirect('/cart');
+    })
+    .catch((err) => console.error(`Error in postCartDeleteItem: ${err}`));
 };
 
 exports.getOrders = (req, res, next) => {
