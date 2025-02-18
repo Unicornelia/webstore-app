@@ -4,17 +4,18 @@
 
 <body>
 <%- include('../includes/navigation.ejs') %>
-<main>
+<main class="centered">
     <% if (products.length > 0)  { %>
         <h1>Your shopping cart</h1>
-        <% console.log(products)%>
     <ul class="cart__item-list">
         <% products.forEach(p => { %>
             <li class="cart__item">
-                <p><%= p.title %> (<%= p.cartItem.quantity %>)</p>
+                <h1><%= p.title %></h1>
+                <img style="width: 10%" src="<%= p.imageUrl %>" alt="<%= p.title %>">
+                <h2>Quantity: <%= p.cartItem.quantity %></h2>
                  <form action="/cart-delete-item" method="POST">
                      <input type="hidden" name="productId" value="<%= p.id %>">
-                     <button class="btn" type="submit">Delete</button>
+                     <button class="btn danger" type="submit">Delete</button>
                  </form>
             </li>
         <% }) %>
