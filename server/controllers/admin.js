@@ -14,8 +14,9 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
   const price = req.body.price;
   const product = new Product(title, imageUrl, description, price);
-  product.save().then((result) => {
-    res.status(201).json({ message: "Product added!" }).redirect('/admin/products');
+  product.save().then(() => {
+    console.log(product, '**** product successfully added!**');
+    res.redirect('/admin/products');
   }).catch((err) => {
     console.log(err);
   });

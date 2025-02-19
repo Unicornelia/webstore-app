@@ -2,17 +2,31 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const cors = require('cors');
 
 // DB import
 const { mongoConnect } = require('./config/database');
 
-const errorController = require('./controllers/error');
-
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.use(cors());
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
+// Serve React Frontend
+const clientBuildPath = path.resolve(__dirname, '../client/build');
+app.use(express.static(clientBuildPath));
+app.use(express.json());
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
 
 // Import Routes
 const adminRoutes = require('./routes/admin');
@@ -20,17 +34,10 @@ const adminRoutes = require('./routes/admin');
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use((req, res, next) => {
-  next();
-});
 
 // Use Routes
 app.use('/admin', adminRoutes);
 // app.use(shopRoutes);
-
-app.use(errorController.get404Page);
 
 // Start Server with MongoDB
 mongoConnect(() => {

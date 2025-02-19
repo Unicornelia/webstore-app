@@ -14,21 +14,21 @@ const AddProduct = () => {
     description: '',
   });
 
-  // useEffect(() => {
-  //   if (editing) {
-  //     fetch(`/api/products/${productId}`)
-  //       .then((res) => res.json())
-  //       .then((data) => {
-  //         setFormData({
-  //           title: data.title,
-  //           imageUrl: data.imageUrl,
-  //           price: data.price,
-  //           description: data.description,
-  //         });
-  //       })
-  //       .catch((err) => console.error(err));
-  //   }
-  // }, [editing, productId]);
+  useEffect(() => {
+    if (editing) {
+      fetch(`/api/products/${productId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFormData({
+            title: data.title,
+            imageUrl: data.imageUrl,
+            price: data.price,
+            description: data.description,
+          });
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [editing, productId]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
