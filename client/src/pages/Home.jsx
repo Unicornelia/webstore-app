@@ -1,8 +1,18 @@
-import "../css/Home.css"; // Ensure styling is included
-
+import '../css/Home.css'; // Ensure styling is included
+import "../css/Product.css";
 import AddToCart from '../components/AddToCart';
+import { useEffect, useState } from 'react';
 
-const Home = ({ products }) => {
+const Home = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/products')
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <main>
       {products.length > 0 ? (
@@ -20,8 +30,8 @@ const Home = ({ products }) => {
                 <p className="product__description">{product.description}</p>
               </div>
               <div className="card__actions">
-                 <AddToCart product={product} />
-                <button className="btn">Add to Cart</button>
+                <AddToCart product={product} />
+                {/*<button className="btn">Add to Cart</button>*/}
               </div>
             </article>
           ))}

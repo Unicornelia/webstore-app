@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import "../css/Product.css";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import '../css/Product.css';
 
 const AdminProducts = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch('http://localhost:3001/admin/products')
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error(err));
   }, []);
 
   const handleDelete = async (productId) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
 
-    await fetch("/api/admin/delete-product", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+    await fetch('/api/admin/delete-product', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: productId }),
     });
 

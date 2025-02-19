@@ -10,6 +10,8 @@ const { mongoConnect } = require('./config/database');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use((req, res, next) => {
@@ -20,24 +22,21 @@ app.use((req, res, next) => {
 });
 
 // Serve React Frontend
+app.use(express.json());
 const clientBuildPath = path.resolve(__dirname, '../client/build');
 app.use(express.static(clientBuildPath));
-app.use(express.json());
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(clientBuildPath, 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(clientBuildPath, 'index.html'));
+// });
 
 // Import Routes
 const adminRoutes = require('./routes/admin');
-// const shopRoutes = require('./routes/shop');
-
-// Middleware
-app.use(bodyParser.urlencoded({ extended: false }));
+const shopRoutes = require('./routes/shop');
 
 // Use Routes
 app.use('/admin', adminRoutes);
-// app.use(shopRoutes);
+app.use(shopRoutes);
 
 // Start Server with MongoDB
 mongoConnect(() => {

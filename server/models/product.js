@@ -1,11 +1,11 @@
 const { getDb } = require('../config/database');
 
 class Product {
-  constructor(title, description, imageUrl, price) {
+  constructor(title, imageUrl, price, description) {
     this.title = title;
-    this.description = description;
-    this.price = price;
     this.imageUrl = imageUrl;
+    this.price = price;
+    this.description = description;
   }
 
   save() {
@@ -15,8 +15,16 @@ class Product {
         console.log(result, '#result');
       })
       .catch((err) => {
-      console.error(`Error in inserting One to DB: ${err}`);
-    });
+        console.error(`Error in inserting One to DB: ${err}`);
+      });
+  }
+
+  static fetchAll() {
+    const db = getDb();
+    // only use this if not too many otherwise paginate
+    return db.collection('products').find().toArray().then(products => {
+      return products;
+    }).catch(error => console.error(error));
   }
 }
 

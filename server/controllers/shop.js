@@ -1,27 +1,27 @@
 const Product = require('../models/Product');
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  console.log('GET / hit');
+  Product.fetchAll()
     .then((products) => {
-      res.render('shop/index', {
-        products,
-        pageTitle: 'Shop',
-        path: '/',
-      });
+      res.json(products);
     })
-    .catch((err) => console.error(`Error in index: ${err}`));
+    .catch((err) => {
+      console.error(`Error in getIndex: ${err}`);
+      res.status(500).json({error: 'Failed to fetch products on index'});
+    });
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  console.log('GET /products hit');
+  Product.fetchAll()
     .then((products) => {
-      res.render('shop/product-list', {
-        products,
-        pageTitle: 'All Products',
-        path: '/products',
-      });
+      res.json(products);
     })
-    .catch((err) => console.error(`Error in getProducts: ${err}`));
+    .catch((err) => {
+      console.error(`Error in getProducts: ${err}`);
+      res.status(500).json({error: 'Failed to fetch products'});
+    });
 };
 
 exports.getProductDetail = (req, res, next) => {

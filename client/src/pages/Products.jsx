@@ -1,8 +1,18 @@
 import { Link } from "react-router-dom";
 import "../css/Product.css";
 import AddToCart from '../components/AddToCart';
+import { useEffect, useState } from 'react';
 
-const Products = ({ products }) => {
+const Products = ( ) => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3001/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <main>
       {products.length > 0 ? (
@@ -23,7 +33,7 @@ const Products = ({ products }) => {
                 <Link to={`/products/${product.id}`} className="btn">
                   Details
                 </Link>
-                 <AddToCart product={product} />
+                 {/*<AddToCart product={product} />*/}
                 <button className="btn">Add to Cart</button>
               </div>
             </article>

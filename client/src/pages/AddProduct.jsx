@@ -46,7 +46,7 @@ const AddProduct = () => {
       body: JSON.stringify(formData),
     });
 
-    navigate('/admin/products'); // Redirect after submission
+    navigate('/products'); // Redirect after submission
   };
 
   return (
