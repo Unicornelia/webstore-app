@@ -28,16 +28,12 @@ exports.getEditProduct = (req, res, next) => {
   if (!editMode) {
     return res.redirect('/');
   }
-  console.log('GET / edit product');
-  console.log(editMode);
-
   const { id } = req.params;
     Product.findById(id)
     .then((product) => {
       if (!product) {
         return res.redirect('/');
       }
-      console.log(product, 'product in admin controller');
       res.json(product);
     })
     .catch((err) => console.error(`Error in getEditProduct: ${err}`));

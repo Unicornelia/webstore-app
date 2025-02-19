@@ -26,7 +26,6 @@ exports.getProductDetail = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId)
     .then((product) => {
-      console.log(product, 'in server');
       res.json(product);
     })
     .catch((err) => console.error(`Error in getProductDetail: ${err}`));
