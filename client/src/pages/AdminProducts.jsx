@@ -41,10 +41,10 @@ const AdminProducts = () => {
                 <p className="product__description">{product.description}</p>
               </div>
               <div className="card__actions">
-                <Link to={`/admin/edit-product/${product.id}`} className="btn">
+                <Link to={`/admin/edit-product/${product._id}`} className="btn">
                   Edit
                 </Link>
-                <button className="btn danger" onClick={() => handleDelete(product.id)}>
+                <button className="btn danger" onClick={() => handleDelete(product._id)}>
                   Delete
                 </button>
               </div>

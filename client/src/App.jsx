@@ -3,7 +3,7 @@ import Navbar from './components/Navbar'; // Adjust the path based on your proje
 import Home from './pages/Home';
 import Products from './pages/Products';
 import Cart from './pages/Cart';
-import AddProduct from './pages/AddProduct';
+import AddOrEditProduct from './pages/AddOrEditProduct';
 import AdminProducts from './pages/AdminProducts';
 import NotFound from './pages/NotFound';
 import ProductDetail from './components/ProductDetail';
@@ -18,8 +18,8 @@ const App = () => {
           <Route path="/products" element={<Products />} />
           <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/admin/add-product" element={<AddProduct />} />
-          <Route path="/admin/edit-product/:productId" element={<AddProduct />} />
+          <Route path="/admin/add-product" element={<AddOrEditProduct />} />
+          <Route path="/admin/edit-product/:productId" element={<AddOrEditProduct />} />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

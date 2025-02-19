@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../css/Product.css'; // Ensure styling is included
 
-const AddProduct = () => {
-  const { productId } = useParams();
+const AddOrEditProduct = () => {
+  const { productId, location } = useParams();
   const navigate = useNavigate();
   const editing = !!productId;
 
@@ -16,17 +16,17 @@ const AddProduct = () => {
 
   useEffect(() => {
     if (editing) {
-      fetch(`/api/products/${productId}`)
+      fetch(`http://localhost:3001/products/${productId}`)
         .then((res) => res.json())
         .then((data) => {
           setFormData({
-            title: data.title,
-            imageUrl: data.imageUrl,
-            price: data.price,
-            description: data.description,
+            title: data.title || '',
+            imageUrl: data.imageUrl || '',
+            price: data.price || '',
+            description: data.description || '',
           });
         })
-        .catch((err) => console.error(err));
+        .catch((err) => console.error('Error fetching product:', err));
     }
   }, [editing, productId]);
 
@@ -40,14 +40,26 @@ const AddProduct = () => {
     const endpoint = editing ? `http://localhost:3001/admin/edit-product/${productId}` : 'http://localhost:3001/admin/add-product';
     const method = editing ? 'PUT' : 'POST';
 
-    await fetch(endpoint, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+
+    try {
+      const response = await fetch(endpoint, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit');
+      }
+
+      navigate('/products'); // Redirect after submission
+    } catch (error) {
+      console.error('Error submitting product:', error);
+    }
 
     navigate('/products'); // Redirect after submission
   };
+
 
   return (
     <main>
@@ -77,4 +89,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddOrEditProduct;

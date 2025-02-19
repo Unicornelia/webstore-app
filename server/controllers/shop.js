@@ -1,7 +1,6 @@
 const Product = require('../models/Product');
 
 exports.getIndex = (req, res, next) => {
-  console.log('GET / hit');
   Product.fetchAll()
     .then((products) => {
       res.json(products);
@@ -13,7 +12,6 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  console.log('GET /products hit');
   Product.fetchAll()
     .then((products) => {
       res.json(products);
@@ -25,9 +23,7 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getProductDetail = (req, res, next) => {
-  console.log('GET /product detail hit');
   const { productId } = req.params;
-  console.log(req.params);
   Product.findById(productId)
     .then((product) => {
       console.log(product, 'in server');

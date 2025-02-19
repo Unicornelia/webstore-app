@@ -26,10 +26,6 @@ app.use(express.json());
 const clientBuildPath = path.resolve(__dirname, '../client/build');
 app.use(express.static(clientBuildPath));
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(clientBuildPath, 'index.html'));
-// });
-
 // Import Routes
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');

@@ -31,7 +31,6 @@ class Product {
   static findById(id) {
     const db = getDb();
     return db.collection('products').find({ _id: new mongodb.ObjectId(id) }).next().then(product => {
-      console.log(product, 'product in  model');
       return product;
     }).catch(err => console.error(`Error in one product with id: ${id} from DB: ${err}`));
   }

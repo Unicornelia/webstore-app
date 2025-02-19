@@ -12,7 +12,7 @@ const {
 } = require('../controllers/admin');
 
 // /admin/products => GET
-// router.get('/products', getProducts);
+router.get('/products', getProducts);
 
 // /admin/add-product => GET
 router.get('/add-product', getAddProduct);
@@ -21,10 +21,10 @@ router.get('/add-product', getAddProduct);
 router.post('/add-product', postAddProduct);
 
 // /admin/edit-product => GET
-// router.get('/edit-product/:id', getEditProduct);
+router.get('/edit-product/:id', getEditProduct);
 
 // /admin/edit-product/:id&editing=true => POST
-// router.post('/edit-product', postEditProduct);
+router.post('/edit-product', postEditProduct);
 
 // /admin/delete-product POST
 // router.post('/delete-product', postDeleteProduct);
