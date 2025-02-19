@@ -3,40 +3,33 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-const errorController = require('./controllers/error');
-
 // DB import
 const { mongoConnect } = require('./config/database');
+
+const errorController = require('./controllers/error');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.resolve(__dirname, '../client/build')));
-
-// API Route Example
-app.get('/api', (req, res) => {
-  res.json({ message: 'Hi from the Server' });
-});
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 // Import Routes
-// const adminRoutes = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 // const shopRoutes = require('./routes/shop');
 
-// Use Routes
-// app.use('/admin', adminRoutes);
-// app.use(shopRoutes);
+// Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve React Frontend
-const clientBuildPath = path.resolve(__dirname, '../client/build');
-app.use(express.static(clientBuildPath));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(clientBuildPath, 'index.html'));
+app.use((req, res, next) => {
+  next();
 });
 
-// 404 Error Handler
+// Use Routes
+app.use('/admin', adminRoutes);
+// app.use(shopRoutes);
+
 app.use(errorController.get404Page);
 
 // Start Server with MongoDB

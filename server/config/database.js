@@ -17,10 +17,12 @@ const mongoConnect = (callback) => {
 };
 
 const getDb = () => {
-  if (!_db) {
+  console.log(_db, 'DB')
+  if (_db) {
     return _db;
+  } else {
+    throw new Error('No DB found for MongoDB_Client.');
   }
-  throw new Error('No DB found for MongoDB_Client.');
 };
 
 exports.getDb = getDb;

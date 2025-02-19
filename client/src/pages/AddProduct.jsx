@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import "../css/Product.css"; // Ensure styling is included
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import '../css/Product.css'; // Ensure styling is included
 
 const AddProduct = () => {
   const { productId } = useParams();
@@ -8,27 +8,27 @@ const AddProduct = () => {
   const editing = !!productId;
 
   const [formData, setFormData] = useState({
-    title: "",
-    imageUrl: "",
-    price: "",
-    description: "",
+    title: '',
+    imageUrl: '',
+    price: '',
+    description: '',
   });
 
-  useEffect(() => {
-    if (editing) {
-      fetch(`/api/products/${productId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setFormData({
-            title: data.title,
-            imageUrl: data.imageUrl,
-            price: data.price,
-            description: data.description,
-          });
-        })
-        .catch((err) => console.error(err));
-    }
-  }, [editing, productId]);
+  // useEffect(() => {
+  //   if (editing) {
+  //     fetch(`/api/products/${productId}`)
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         setFormData({
+  //           title: data.title,
+  //           imageUrl: data.imageUrl,
+  //           price: data.price,
+  //           description: data.description,
+  //         });
+  //       })
+  //       .catch((err) => console.error(err));
+  //   }
+  // }, [editing, productId]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,8 +37,8 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const endpoint = editing ? `/api/admin/edit-product/${productId}` : "/api/admin/add-product";
-    const method = editing ? "PUT" : "POST";
+    const endpoint = editing ? `http://localhost:3001/admin/edit-product/${productId}` : 'http://localhost:3001/admin/add-product';
+    const method = editing ? 'PUT' : 'POST';
 
     await fetch(endpoint, {
       method,
@@ -46,7 +46,7 @@ const AddProduct = () => {
       body: JSON.stringify(formData),
     });
 
-    navigate("/admin/products"); // Redirect after submission
+    navigate('/admin/products'); // Redirect after submission
   };
 
   return (
@@ -70,7 +70,7 @@ const AddProduct = () => {
         </div>
 
         <button className="btn" type="submit">
-          {editing ? "Update Product" : "Add Product"}
+          {editing ? 'Update Product' : 'Add Product'}
         </button>
       </form>
     </main>
