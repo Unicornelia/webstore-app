@@ -18,7 +18,7 @@ const Home = () => {
       {products.length > 0 ? (
         <div className="grid">
           {products.map((product) => (
-            <article key={product.id} className="card product-item">
+            <article key={product._id} className="card product-item">
               <header className="card__header">
                 <h1 className="product__title">{product.title}</h1>
               </header>

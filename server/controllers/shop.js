@@ -8,7 +8,7 @@ exports.getIndex = (req, res, next) => {
     })
     .catch((err) => {
       console.error(`Error in getIndex: ${err}`);
-      res.status(500).json({error: 'Failed to fetch products on index'});
+      res.status(500).json({ error: 'Failed to fetch products on index' });
     });
 };
 
@@ -20,21 +20,20 @@ exports.getProducts = (req, res, next) => {
     })
     .catch((err) => {
       console.error(`Error in getProducts: ${err}`);
-      res.status(500).json({error: 'Failed to fetch products'});
+      res.status(500).json({ error: 'Failed to fetch products' });
     });
 };
 
 exports.getProductDetail = (req, res, next) => {
+  console.log('GET /product detail hit');
   const { productId } = req.params;
-  Product.findByPk(productId)
+  console.log(req.params);
+  Product.findById(productId)
     .then((product) => {
-      res.render('shop/product-detail', {
-        product,
-        pageTitle: product.title,
-        path: '/products',
-      });
+      console.log(product, 'in server');
+      res.json(product);
     })
-    .catch((err) => console.error(`Error in postProductDetail: ${err}`));
+    .catch((err) => console.error(`Error in getProductDetail: ${err}`));
 };
 
 exports.getCart = (req, res, next) => {
@@ -51,7 +50,7 @@ exports.getCart = (req, res, next) => {
           });
         })
         .catch((err) =>
-          console.error(`Error in getProducts from cart: ${err}`)
+          console.error(`Error in getProducts from cart: ${err}`),
         );
     })
     .catch((err) => console.error(`Error in getCart: ${err}`));
@@ -123,11 +122,11 @@ exports.postOrder = (req, res, next) => {
             products.map((product) => {
               product.orderItem = { quantity: product.cartItem.quantity };
               return product;
-            })
+            }),
           );
         })
         .catch((err) =>
-          console.error(`Error in add products to order: ${err}`)
+          console.error(`Error in add products to order: ${err}`),
         );
     })
     .then((result) => {

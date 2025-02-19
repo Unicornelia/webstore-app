@@ -21,16 +21,6 @@ exports.postAddProduct = (req, res, next) => {
   }).catch((err) => {
     console.log(err);
   });
-
-  // req.user
-  //   .createProduct({ title, imageUrl, description, price })
-  //   .then((r) => {
-  //     console.log(`Created product: ${r}`);
-  //     res.redirect('/admin/products');
-  //   })
-  //   .catch((err) => {
-  //     console.error(`Error in postAddProduct: ${err}`);
-  //   });
 };
 
 // exports.getEditProduct = (req, res, next) => {

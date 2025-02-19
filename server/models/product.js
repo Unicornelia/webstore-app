@@ -1,4 +1,5 @@
 const { getDb } = require('../config/database');
+const mongodb = require('mongodb');
 
 class Product {
   constructor(title, imageUrl, price, description) {
@@ -24,7 +25,15 @@ class Product {
     // only use this if not too many otherwise paginate
     return db.collection('products').find().toArray().then(products => {
       return products;
-    }).catch(error => console.error(error));
+    }).catch(err => console.error(`Error in fetching all products from DB: ${err}`));
+  }
+
+  static findById(id) {
+    const db = getDb();
+    return db.collection('products').find({ _id: new mongodb.ObjectId(id) }).next().then(product => {
+      console.log(product, 'product in  model');
+      return product;
+    }).catch(err => console.error(`Error in one product with id: ${id} from DB: ${err}`));
   }
 }
 

@@ -18,7 +18,7 @@ const Products = ( ) => {
       {products.length > 0 ? (
         <div className="grid">
           {products.map((product) => (
-            <article key={product.id} className="card product-item">
+            <article key={product._id} className="card product-item">
               <header className="card__header">
                 <h1 className="product__title">{product.title}</h1>
               </header>
@@ -30,7 +30,7 @@ const Products = ( ) => {
                 <p className="product__description">{product.description}</p>
               </div>
               <div className="card__actions">
-                <Link to={`/products/${product.id}`} className="btn">
+                <Link to={`/products/${product._id}`} className="btn">
                   Details
                 </Link>
                  {/*<AddToCart product={product} />*/}

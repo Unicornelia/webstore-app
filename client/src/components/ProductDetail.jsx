@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import "./ProductDetail.css"; // Ensure styling is included
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import '../css/Product.css';
+import AddToCart from '../components/AddToCart';
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    fetch(`/api/products/${productId}`) // Adjust API endpoint as needed
+    fetch(`/products/${productId}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((err) => console.error(err));
@@ -27,9 +28,7 @@ const ProductDetail = () => {
       </div>
       <h3 className="product__price">EUR {product.price}</h3>
       <p className="product__description">{product.description}</p>
-      {/* Include your Add to Cart component */}
-      {/* <AddToCart product={product} /> */}
-      <button className="btn">Add to Cart</button>
+       <AddToCart product={product} />
     </main>
   );
 };
