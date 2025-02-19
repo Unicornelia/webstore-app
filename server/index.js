@@ -1,106 +1,47 @@
 require('dotenv').config();
-const { styleText } = require('node:util');
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 
 const errorController = require('./controllers/error');
-const sequelize = require('./config/connection');
 
-const Product = require('./models/product');
-const User = require('./models/user');
-const Cart = require('./models/cart');
-const CartItem = require('./models/cart-item');
+// DB import
+const { mongoConnect } = require('./config/database');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.resolve(__dirname, '../client/build')));
+
+// API Route Example
 app.get('/api', (req, res) => {
   res.json({ message: 'Hi from the Server' });
 });
 
-// All other GET requests not handled before will return our React app
+// Import Routes
+// const adminRoutes = require('./routes/admin');
+// const shopRoutes = require('./routes/shop');
+
+// Use Routes
+// app.use('/admin', adminRoutes);
+// app.use(shopRoutes);
+
+// Serve React Frontend
+const clientBuildPath = path.resolve(__dirname, '../client/build');
+app.use(express.static(clientBuildPath));
+
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
 
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-const Order = require('./models/order');
-const OrderItem = require('./models/order-items');
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.resolve(__dirname, '../client/build')));
-
-// middleware to get access to the user in the whole app
-// this is just registering for incoming requests
-app.use((req, res, next) => {
-  User.findByPk(1)
-    .then((user) => {
-      // we add a new field to the req object, a seq object indeed
-      req.user = user;
-      next();
-    })
-    .catch((err) => {
-      console.error(`Error in find user by id: 1 => ${err}`);
-    });
-});
-
-app.use('/admin', adminRoutes);
-app.use(shopRoutes);
+// 404 Error Handler
 app.use(errorController.get404Page);
 
-Product.belongsTo(User, {
-  constraints: true,
-  onDelete: 'CASCADE',
+// Start Server with MongoDB
+mongoConnect(() => {
+  app.listen(PORT, () => {
+    console.log(`📡 Server running on http://localhost:${PORT} 📡`);
+  });
 });
-User.hasMany(Product);
-User.hasOne(Cart);
-Cart.belongsTo(User);
-Cart.belongsToMany(Product, { through: CartItem });
-Product.belongsToMany(Cart, { through: CartItem });
-Order.belongsTo(User);
-User.hasMany(Order);
-Order.belongsToMany(Product, { through: OrderItem });
-
-sequelize
-  .authenticate()
-  .then(() =>
-    console.info(
-      styleText(
-        'cyanBright',
-        '🔌 Connection has been established successfully. 🔌'
-      )
-    )
-  )
-  .catch((error) => {
-    console.error(
-      styleText('red', `Unable to connect to the database:, ${error}`)
-    );
-  });
-
-sequelize
-  // .sync({ force: true })
-  .sync()
-  .then((result) => {
-    return User.findByPk(1);
-  })
-  .then((user) => {
-    if (!user) {
-      return User.create({ name: 'Admin', email: 'admin@email.com' });
-    }
-    return user;
-  })
-  .then((user) => {
-    return user.createCart();
-  })
-  .then((cart) => {
-    app.listen(PORT, () => {
-      console.info(
-        styleText('greenBright', `📡 Sever listening at port ${PORT} 📡`)
-      );
-    });
-  })
-  .catch((err) => {
-    console.error(styleText('red', `Error in App:, ${err}`));
-  });
