@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js",
+    "start": "nodemon server/index.js",
+    "build": "cd client && npm install && npm run build",
     "format": "prettier --write .",
     "lint": "eslint . ",
     "lint:fix": "eslint . --fix "
@@ -16,6 +17,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Unicornelia/node-project.git"
+  },
+  "engines": {
+    "node": "23.5.0"
   },
   "bugs": {
     "url": "https://github.com/Unicornelia/node-project/issues"

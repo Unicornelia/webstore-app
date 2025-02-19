@@ -1,0 +1,61 @@
+.product-form {
+    width: 20rem;
+    max-width: 90%;
+    margin: 0 auto;
+    display: block;
+}
+
+.product-item {
+    width: 20rem;
+    max-width: 95%;
+    margin: 1rem;
+}
+
+.product__title {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.product__price {
+    text-align: center;
+    color: #4d4d4d;
+    margin-bottom: 0.5rem;
+}
+
+.product__description {
+    text-align: center;
+}
+
+.product__image {
+    max-width: 50%;
+    justify-self: center;
+}
+
+.product__image img {
+    text-align: center;
+    max-width: 70%;
+}
+
+.product-form-control {
+    margin: 1rem 0;
+}
+
+.product-form-control label,
+.product-form-control input,
+.product-form-control textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.25rem;
+}
+
+.product-form-control input,
+.product-form-control textarea {
+    font: inherit;
+    border: 1px solid #2a856e;
+    border-radius: 4px;
+}
+
+.product-form-control input:focus,
+.product-form-control textarea:focus {
+    outline-color: #00695c;
+}

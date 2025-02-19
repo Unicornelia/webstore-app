@@ -13,10 +13,16 @@ const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.get('/api', (req, res) => {
+  res.json({ message: 'Hi from the Server' });
+});
+
+// All other GET requests not handled before will return our React app
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+});
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -24,7 +30,7 @@ const Order = require('./models/order');
 const OrderItem = require('./models/order-items');
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // middleware to get access to the user in the whole app
 // this is just registering for incoming requests
