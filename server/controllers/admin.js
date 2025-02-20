@@ -29,7 +29,7 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/');
   }
   const { id } = req.params;
-    Product.findById(id)
+  Product.findById(id)
     .then((product) => {
       if (!product) {
         return res.redirect('/');
@@ -40,34 +40,28 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-  // fetch info for the product
-  const productId = req.body.id;
-  const updatedTitle = req.body.title;
-  const updatedImgUrl = req.body.imageUrl;
-  const updatedDescription = req.body.description;
-  const updatedPrice = req.body.price;
-
-  Product.findByPk(productId)
-    .then((product) => {
-      product.title = updatedTitle;
-      product.imageUrl = updatedImgUrl;
-      product.description = updatedDescription;
-      product.price = updatedPrice;
-      return product.save();
-    })
+  const {
+    id,
+    title,
+    imageUrl,
+    price,
+    description,
+  } = req.body;
+  const product = new Product(title, imageUrl, price, description, id);
+  product.save()
     .then((result) => {
-      console.info(`Updated product: ${result}`);
-      res.redirect('/admin/products');
+      res.json(result);
+      console.info(`Updated product`);
     })
-    .catch((err) => console.error(`Error in postEditProduct: ${err}`));
+    .catch((err) => console.error(`Error in updating product: ${err}`));
 };
 
 exports.getProducts = (req, res, next) => {
- Product.fetchAll()
+  Product.fetchAll()
     .then((products) => {
-    res.json(products);
+      res.json(products);
     })
-    .catch((err) => console.error(`Error in getProducts: ${err}`));
+    .catch((err) => console.error(`Error in fetching all products: ${err}`));
 };
 
 // exports.postDeleteProduct = (req, res, next) => {

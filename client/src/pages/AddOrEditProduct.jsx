@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import '../css/Product.css'; // Ensure styling is included
 
 const AddOrEditProduct = () => {
-  const { productId, location } = useParams();
+  const { productId } = useParams();
   const navigate = useNavigate();
   const editing = !!productId;
 
@@ -36,28 +36,26 @@ const AddOrEditProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const endpoint = editing ? `http://localhost:3001/admin/edit-product/${productId}` : 'http://localhost:3001/admin/add-product';
-    const method = editing ? 'PUT' : 'POST';
-
+    const endpoint = editing ? `http://localhost:3001/admin/edit-product` : 'http://localhost:3001/admin/add-product';
+    const method = editing ? 'POST' : 'POST';
 
     try {
       const response = await fetch(endpoint, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, id: productId }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to submit');
       }
 
-      navigate('/products'); // Redirect after submission
+      navigate('/admin/products'); // Redirect after submission
     } catch (error) {
       console.error('Error submitting product:', error);
     }
 
-    navigate('/products'); // Redirect after submission
+    navigate('/admin/products'); // Redirect after submission
   };
 
 
