@@ -38,12 +38,13 @@ const AddOrEditProduct = () => {
     e.preventDefault();
     const endpoint = editing ? `http://localhost:3001/admin/edit-product` : 'http://localhost:3001/admin/add-product';
     const method = editing ? 'POST' : 'POST';
+    let responseBody = editing ? { ...formData, id: productId } : formData;
 
     try {
       const response = await fetch(endpoint, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, id: productId }),
+        body: JSON.stringify(responseBody),
       });
 
       if (!response.ok) {
@@ -57,7 +58,6 @@ const AddOrEditProduct = () => {
 
     navigate('/admin/products'); // Redirect after submission
   };
-
 
   return (
     <main>

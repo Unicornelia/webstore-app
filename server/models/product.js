@@ -9,19 +9,21 @@ class Product {
     this.imageUrl = imageUrl;
     this.price = price;
     this.description = description;
-    this._id = new ObjectId(id);
+    this._id = id ?  new ObjectId(id) : null;
   }
 
   save() {
     const db = getDb();
     let dbOperation;
+    const status = this._id ? 'Updated' : 'Created';
     if (this._id) {
       dbOperation = db.collection('products').updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this });
     } else {
+      console.log(this);
       dbOperation = db.collection('products').insertOne(this);
     }
     return dbOperation.then(result => {
-      console.log(result, '#result');
+      console.log(result, `Product successfully ${status}`);
       return result;
     })
       .catch((err) => {
@@ -42,6 +44,13 @@ class Product {
     return db.collection('products').find({ _id: new mongodb.ObjectId(id) }).next().then(product => {
       return product;
     }).catch(err => console.error(`Error in one product with id: ${id} from DB: ${err}`));
+  }
+
+  static deleteById(id) {
+    const db = getDb();
+    return db.collection('products').deleteOne({ _id: new mongodb.ObjectId(id) })
+      .then(result => console.log(result, 'Product Deleted Successfully'))
+      .catch(err => console.error(`Error in deleting product: ${err}`));
   }
 }
 

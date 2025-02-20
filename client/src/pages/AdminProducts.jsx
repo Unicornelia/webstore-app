@@ -9,19 +9,28 @@ const AdminProducts = () => {
     fetch('http://localhost:3001/admin/products')
       .then((res) => res.json())
       .then((data) => setProducts(data))
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(`Error fetching products: ${err}`));
   }, []);
 
   const handleDelete = async (productId) => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    try {
+      const response = await fetch(`http://localhost:3001/admin/delete-product/${productId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      });
 
-    await fetch('/api/admin/delete-product', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: productId }),
-    });
+      if (!response.ok) {
+        throw new Error('Failed to delete product');
+      }
 
-    setProducts(products.filter((product) => product.id !== productId));
+      // Fetch updated products list
+      const updatedProducts = await fetch('http://localhost:3001/admin/products');
+      const productsData = await updatedProducts.json();
+      setProducts(productsData); // Update state with new product list
+
+    } catch (err) {
+      console.error(`Error deleting product: ${err}`);
+    }
   };
 
   return (

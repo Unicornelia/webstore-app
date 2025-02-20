@@ -64,12 +64,14 @@ exports.getProducts = (req, res, next) => {
     .catch((err) => console.error(`Error in fetching all products: ${err}`));
 };
 
-// exports.postDeleteProduct = (req, res, next) => {
-//   const productId = req.body.id;
-//   Product.destroy({ where: { id: productId } })
-//     .then((r) => {
-//       console.log(`${r} has been deleted`);
-//       res.redirect('/admin/products');
-//     })
-//     .catch((err) => console.error(`Error in postDeleteProduct: ${err}`));
-// };
+exports.deleteProduct = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const result = await Product.deleteById(id);
+    console.log(`Product ${id} has been deleted`);
+    res.status(200).json({ message: 'Product deleted successfully' });
+  } catch (err) {
+    console.error(`Error deleting product: ${err}`);
+    res.status(500).json({ message: 'Failed to delete product' });
+  }
+};
