@@ -12,13 +12,16 @@ const Cart = () => {
   }, []);
 
   const handleDelete = async (productId) => {
-    await fetch('/api/cart-delete-item', {
+    await fetch('http://localhost:3001/cart-delete-item', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ productId }),
     });
 
-    setCartItems(cartItems.filter((item) => item.id !== productId));
+    const updatedCartItems = await fetch('http://localhost:3001/cart');
+    const updatedCart = await updatedCartItems.json();
+
+    setCartItems(updatedCart);
   };
 
   const handleOrder = async () => {

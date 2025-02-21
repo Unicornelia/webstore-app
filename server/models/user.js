@@ -58,6 +58,12 @@ class User {
       .catch((err) => console.error(`Error in getCart: ${err}`));
   };
 
+  deleteFromCart = (productId) => {
+    const db = getDb();
+    const updatedCartItems = this.cart.items.filter(item => item.productId.toString() !== productId.toString());
+    return db.collection('users').updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: { items: updatedCartItems } } });
+  };
+
   static async findById(id) {
     const db = getDb();
     try {
