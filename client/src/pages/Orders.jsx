@@ -20,7 +20,7 @@ const Orders = () => {
       ) : (
         orders.map((order) => (
           <div key={order._id} className="order-card">
-            <h2>Order by <span>(User: {order.user.name})</span></h2>
+            <h2>Order</h2>
             <h4>ref: #{order._id}</h4>
             <div className="order-items">
               {order.items.map((item) => (
