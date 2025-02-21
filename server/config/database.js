@@ -1,12 +1,13 @@
 const mongodb = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
+const { styleText } = require('util');
 
 let _db;
 
 const mongoConnect = (callback) => {
   MongoClient.connect(process.env.MONGODB_URI)
     .then(client => {
-      console.info('🔋Connected to the MongoDB_Client');
+      console.info(styleText('blueBright', '🔋Connected to the MongoDB_Client'));
       _db = client.db();
       callback();
     })

@@ -27,7 +27,7 @@ class Product {
       return result;
     })
       .catch((err) => {
-        console.error(`Error in inserting One to DB: ${err}`);
+        console.error(`Error in inserting product to DB: ${err}`);
       });
   }
 
@@ -43,7 +43,7 @@ class Product {
     const db = getDb();
     return db.collection('products').find({ _id: new mongodb.ObjectId(id) }).next().then(product => {
       return product;
-    }).catch(err => console.error(`Error in one product with id: ${id} from DB: ${err}`));
+    }).catch(err => console.error(`Error in finding product with id: ${id} from DB: ${err}`));
   }
 
   static deleteById(id) {
