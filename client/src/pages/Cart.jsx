@@ -5,7 +5,7 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/cart') // Adjust API endpoint as needed
+    fetch('http://localhost:3001/cart')
       .then((res) => res.json())
       .then((data) => setCartItems(data))
       .catch((err) => console.error(err));

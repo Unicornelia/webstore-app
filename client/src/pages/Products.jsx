@@ -33,8 +33,7 @@ const Products = ( ) => {
                 <Link to={`/products/${product._id}`} className="btn">
                   Details
                 </Link>
-                 {/*<AddToCart product={product} />*/}
-                <button className="btn">Add to Cart</button>
+                 <AddToCart productId={product._id} />
               </div>
             </article>
           ))}

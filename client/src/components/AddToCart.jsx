@@ -1,7 +1,8 @@
 const AddToCart = ({ productId }) => {
+  console.log(productId);
   const handleAddToCart = async () => {
     try {
-      await fetch("/api/cart", {
+      await fetch("http://localhost:3001/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId }),
