@@ -20,7 +20,7 @@ class User {
     }
   };
 
-  addToCart = async (product) => {
+  addToCart = (product) => {
     const db = getDb();
     let newQuantity = 1;
 
@@ -40,6 +40,22 @@ class User {
 
     const updatedCart = { items: updatedCartItems };
     return db.collection('users').updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: updatedCart } });
+  };
+
+  getCart = () => {
+    const db = getDb();
+    const productIds = this.cart.items.map(item => {
+      return item.productId;
+    });
+
+    return db.collection('products').find({ _id: { $in: productIds } })
+      .toArray()
+      .then(products => {
+        return products.map(product => {
+          return { ...product, quantity: this.cart.items.find(item => item.productId.toString() === product._id.toString()).quantity };
+        });
+      })
+      .catch((err) => console.error(`Error in getCart: ${err}`));
   };
 
   static async findById(id) {

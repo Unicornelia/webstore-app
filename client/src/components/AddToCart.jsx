@@ -1,15 +1,15 @@
 const AddToCart = ({ productId }) => {
   const handleAddToCart = async () => {
     try {
-      await fetch("http://localhost:3001/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      await fetch('http://localhost:3001/cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId }),
       });
 
-      alert("Product added to cart!");
+      alert('Product added to cart!');
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      console.error(`Error adding to cart: ${error}`);
     }
   };
 
