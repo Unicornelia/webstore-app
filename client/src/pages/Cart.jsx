@@ -36,7 +36,7 @@ const Cart = () => {
   };
 
   const handleOrder = async () => {
-    await fetch('/api/create-order', { method: 'POST' });
+    await fetch('http://localhost:3001/create-order', { method: 'POST' });
 
     setCartItems([]); // Clear cart after order
   };

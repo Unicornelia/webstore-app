@@ -31,7 +31,6 @@ const Home = () => {
               </div>
               <div className="card__actions">
                 <AddToCart product={product} />
-                {/*<button className="btn">Add to Cart</button>*/}
               </div>
             </article>
           ))}

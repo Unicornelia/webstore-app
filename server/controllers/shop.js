@@ -65,43 +65,16 @@ exports.postCartDeleteItem = (req, res, next) => {
 exports.postOrder = (req, res, next) => {
   let fetchedCart;
   req.user
-    .getCart()
-    .then((cart) => {
-      fetchedCart = cart;
-      return cart.getProducts();
-    })
-    .then((products) => {
-      return req.user
-        .createOrder()
-        .then((order) => {
-          return order.addProducts(
-            products.map((product) => {
-              product.orderItem = { quantity: product.cartItem.quantity };
-              return product;
-            }),
-          );
-        })
-        .catch((err) =>
-          console.error(`Error in add products to order: ${err}`),
-        );
-    })
-    .then((result) => {
-      fetchedCart.setProducts(null);
-    })
+    .addOrder()
     .then((result) => res.redirect('/orders'))
     .catch((err) => console.error(`Error in postOrder: ${err}`));
 };
 
 exports.getOrders = (req, res, next) => {
   req.user
-    // eager loading
-    .getOrders({ include: ['products'] })
+    .getOrder()
     .then((orders) => {
-      res.render('shop/orders', {
-        pageTitle: 'Your Orders',
-        path: '/orders',
-        orders,
-      });
+      res.json(orders);
     })
     .catch((err) => {
       console.error(`Error in getOrders: ${err}`);

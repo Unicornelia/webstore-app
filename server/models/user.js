@@ -1,5 +1,6 @@
 const { getDb } = require('../config/database');
 const mongodb = require('mongodb');
+const Product = require('./product');
 
 const ObjectId = mongodb.ObjectId;
 
@@ -39,7 +40,9 @@ class User {
     }
 
     const updatedCart = { items: updatedCartItems };
-    return db.collection('users').updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: updatedCart } });
+    return db.collection('users').updateOne(
+      { _id: new ObjectId(this._id) },
+      { $set: { cart: updatedCart } });
   };
 
   getCart = () => {
@@ -61,7 +64,34 @@ class User {
   deleteFromCart = (productId) => {
     const db = getDb();
     const updatedCartItems = this.cart.items.filter(item => item.productId.toString() !== productId.toString());
-    return db.collection('users').updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: { items: updatedCartItems } } });
+    return db.collection('users').updateOne(
+      { _id: new ObjectId(this._id) },
+      { $set: { cart: { items: updatedCartItems } } });
+  };
+
+  addOrder = () => {
+    const db = getDb();
+    return this.getCart().then(products => {
+      const order = {
+        items: products,
+        user: {
+          _id: new ObjectId(this._id),
+          name: this.name,
+        }
+      }
+      return db.collection('orders').insertOne(order)
+    })
+    .then(result => {
+      this.cart = { items: [] };
+      return db.collection('users').updateOne(
+        { _id: new ObjectId(this._id) },
+        { $set: { cart: { items: [] } } });
+    });
+  };
+
+  getOrder = () => {
+    const db = getDb();
+    return db.collection('orders').find({}).toArray();
   };
 
   static async findById(id) {

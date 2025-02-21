@@ -7,6 +7,7 @@ import AddOrEditProduct from './pages/AddOrEditProduct';
 import AdminProducts from './pages/AdminProducts';
 import NotFound from './pages/NotFound';
 import ProductDetail from './components/ProductDetail';
+import Orders from './pages/Orders';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/products" element={<Products />} />
           <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/orders" element={<Orders />} />
           <Route path="/admin/add-product" element={<AddOrEditProduct />} />
           <Route path="/admin/edit-product/:productId" element={<AddOrEditProduct />} />
           <Route path="/admin/products" element={<AdminProducts />} />
