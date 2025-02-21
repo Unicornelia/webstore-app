@@ -12,16 +12,27 @@ const Cart = () => {
   }, []);
 
   const handleDelete = async (productId) => {
-    await fetch('http://localhost:3001/cart-delete-item', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productId }),
-    });
+    try {
+      const response = await fetch('http://localhost:3001/cart-delete-item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId }),
+      });
 
-    const updatedCartItems = await fetch('http://localhost:3001/cart');
-    const updatedCart = await updatedCartItems.json();
+      if (!response.ok) {
+        throw new Error('Failed to delete product');
+      }
 
-    setCartItems(updatedCart);
+      // Fetch updated cart items
+      const updatedCartItems = await fetch('http://localhost:3001/cart');
+      const updatedCart = await updatedCartItems.json();
+
+      setCartItems(updatedCart);
+
+    } catch (err) {
+      console.error(`Error deleting from cart: ${err}`);
+    }
+
   };
 
   const handleOrder = async () => {

@@ -13,6 +13,8 @@ const AdminProducts = () => {
   }, []);
 
   const handleDelete = async (productId) => {
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
+
     try {
       const response = await fetch(`http://localhost:3001/admin/delete-product/${productId}`, {
         method: 'DELETE',
