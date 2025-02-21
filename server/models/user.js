@@ -22,12 +22,23 @@ class User {
 
   addToCart = async (product) => {
     const db = getDb();
+    let newQuantity = 1;
 
-    // const cartProduct = this.cart.items.findIndex((element) => {
-    //   return element._id === product._id;
-    // })
+    const cartProductIndex = this.cart.items.findIndex((item) => {
+      return item.productId.toString() === product._id.toString();
+    });
 
-    const updatedCart = { items: [{ productId: new ObjectId(product._id), quantity: 1 }] };
+    const isItemAlreadyInCart = cartProductIndex >= 0;
+    const updatedCartItems = [...this.cart.items];
+
+    if (isItemAlreadyInCart) {
+      newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+      updatedCartItems[cartProductIndex].quantity = newQuantity;
+    } else {
+      updatedCartItems.push({ productId: new ObjectId(product._id), quantity: newQuantity });
+    }
+
+    const updatedCart = { items: updatedCartItems };
     return db.collection('users').updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: updatedCart } });
   };
 

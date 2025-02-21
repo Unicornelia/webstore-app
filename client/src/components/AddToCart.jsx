@@ -1,5 +1,4 @@
 const AddToCart = ({ productId }) => {
-  console.log(productId);
   const handleAddToCart = async () => {
     try {
       await fetch("http://localhost:3001/cart", {
