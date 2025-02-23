@@ -13,12 +13,10 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const userId = req.user._id;
 
-  const product = new Product(title, imageUrl, price, description, null, userId);
-  product.save().then(() => {
-    console.log(product, '**** product successfully added!**');
-    res.redirect('/admin/products');
+  const product = new Product({ title, imageUrl, price, description });
+  product.save().then((result) => {
+    res.json(result);
   }).catch((err) => {
     console.error(`Error in postAddProduct: ${err}`);
   });
