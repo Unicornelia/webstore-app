@@ -9,6 +9,7 @@ const { styleText } = require('util');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const mongooseConnect = require('./config/database');
+const User = require('./models/user');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -29,26 +30,40 @@ app.use(express.json());
 const clientBuildPath = path.resolve(__dirname, '../client/build');
 app.use(express.static(clientBuildPath));
 
-// app.use((req, res, next) => {
-//   const userId = '67b7462ab6569d1f8907d7be';
-//   User.findById(userId)
-//     .then(user => {
-//       req.user = new User(user.name, user.email, user._id, user.cart);
-//       next();
-//     })
-//     .catch((err) => {
-//       console.error(styleText('redBright', `Error: ${err} in finding user with id: ${userId}`));
-//     });
-// });
+app.use((req, res, next) => {
+  const userId = process.env.USER_ID;
+  User.findById(userId)
+    .then(user => {
+      // console.log(`User found: ${user}`);
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.error(styleText('redBright', `Error: ${err} in finding user with id: ${userId}`));
+    });
+});
 
 // Use Routes
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
-// Start Server
+// Start Server and create user if none exists
 mongooseConnect(() => {
   console.info(styleText('blueBright', `🔋 Connected to Mongoose 🔋 `));
+  User.findOne().then(user => {
+    if (!user) {
+      const user = new User({
+        name: 'Rosa',
+        email: 'rosa@parks.com',
+        cart: [],
+      });
+
+      user.save()
+        .then(r => console.log(`User created: ${r}`))
+        .catch(err => console.error(`Error in user save: ${err}`));
+    }
+  })
   app.listen(PORT, () => {
     console.log(styleText('cyanBright', `📡 Server running on http://localhost:${PORT} 📡`));
-  })
+  });
 }).catch(err => console.log(err));

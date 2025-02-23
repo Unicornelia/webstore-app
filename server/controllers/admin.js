@@ -2,12 +2,13 @@ const Product = require('../models/product');
 
 postAddProduct = async (req, res) => {
   try {
-    const title = req.body.title;
-    const imageUrl = req.body.imageUrl;
-    const price = req.body.price;
-    const description = req.body.description;
-
-    const product = new Product({ title, imageUrl, price, description });
+    const product = new Product({
+      title: req.body.title,
+      imageUrl: req.body.imageUrl,
+      price: req.body.price,
+      description: req.body.description,
+      userId: req.user._id,
+    });
     const result = await product.save();
     res.json(result);
     console.info(`Added new product: ${result}`);
