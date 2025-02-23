@@ -5,13 +5,10 @@ const path = require('path');
 const cors = require('cors');
 const { styleText } = require('util');
 
-// local DB and model import
-const { mongoConnect } = require('./config/database');
-const User = require('./models/user');
-
 // Import Routes
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const mongooseConnect = require('./config/database');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -32,25 +29,26 @@ app.use(express.json());
 const clientBuildPath = path.resolve(__dirname, '../client/build');
 app.use(express.static(clientBuildPath));
 
-app.use((req, res, next) => {
-  const userId = '67b7462ab6569d1f8907d7be';
-  User.findById(userId)
-    .then(user => {
-      req.user = new User(user.name, user.email, user._id, user.cart);
-      next();
-    })
-    .catch((err) => {
-      console.error(styleText('redBright', `Error: ${err} in finding user with id: ${userId}`));
-    });
-});
+// app.use((req, res, next) => {
+//   const userId = '67b7462ab6569d1f8907d7be';
+//   User.findById(userId)
+//     .then(user => {
+//       req.user = new User(user.name, user.email, user._id, user.cart);
+//       next();
+//     })
+//     .catch((err) => {
+//       console.error(styleText('redBright', `Error: ${err} in finding user with id: ${userId}`));
+//     });
+// });
 
 // Use Routes
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
-// Start Server with MongoDB
-mongoConnect(() => {
+// Start Server
+mongooseConnect(() => {
+  console.info(styleText('blueBright', `🔋 Connected to Mongoose 🔋 `));
   app.listen(PORT, () => {
     console.log(styleText('cyanBright', `📡 Server running on http://localhost:${PORT} 📡`));
-  });
-});
+  })
+}).catch(err => console.log(err));

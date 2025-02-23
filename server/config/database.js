@@ -1,14 +1,11 @@
-const mongodb = require('mongodb');
-const MongoClient = require('mongodb').MongoClient;
-const { styleText } = require('util');
+const mongoose = require('mongoose');
 
-let _db;
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
-const mongoConnect = (callback) => {
-  MongoClient.connect(process.env.MONGODB_URI)
+const mongooseConnect = (callback) => {
+  return mongoose.connect(process.env.MONGODB_URI, clientOptions)
     .then(client => {
-      console.info(styleText('blueBright', '🔋Connected to the MongoDB_Client'));
-      _db = client.db();
+      console.info('🔋Connected to the MongoDB_Client');
       callback();
     })
     .catch(err => {
@@ -17,13 +14,4 @@ const mongoConnect = (callback) => {
     });
 };
 
-const getDb = () => {
-  if (_db) {
-    return _db;
-  } else {
-    throw new Error('No DB found for MongoDB_Client.');
-  }
-};
-
-exports.getDb = getDb;
-exports.mongoConnect = mongoConnect;
+module.exports = mongooseConnect;
