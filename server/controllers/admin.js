@@ -1,72 +1,77 @@
 const Product = require('../models/product');
 
-exports.getAddProduct = (req, res, next) => {
-  res.render('admin/edit-product', {
-    pageTitle: 'Add Product',
-    path: '/admin/add-product',
-    editing: false,
-  });
-};
+postAddProduct = async (req, res) => {
+  try {
+    const title = req.body.title;
+    const imageUrl = req.body.imageUrl;
+    const price = req.body.price;
+    const description = req.body.description;
 
-exports.postAddProduct = (req, res, next) => {
-  const title = req.body.title;
-  const imageUrl = req.body.imageUrl;
-  const price = req.body.price;
-  const description = req.body.description;
-
-  const product = new Product({ title, imageUrl, price, description });
-  product.save().then((result) => {
+    const product = new Product({ title, imageUrl, price, description });
+    const result = await product.save();
     res.json(result);
-  }).catch((err) => {
-    console.error(`Error in postAddProduct: ${err}`);
-  });
-};
-
-exports.getEditProduct = (req, res, next) => {
-  const editMode = req.query.editing;
-  if (!editMode) {
-    return res.redirect('/');
+    console.info(`Added new product: ${result}`);
+  } catch (e) {
+    console.error(`Error in postAddProduct: ${e}`);
   }
-  const { id } = req.params;
-  Product.findById(id)
-    .then((product) => {
-      if (!product) {
-        return res.redirect('/');
-      }
-      res.json(product);
-    })
-    .catch((err) => console.error(`Error in getEditProduct: ${err}`));
 };
 
-exports.postEditProduct = (req, res, next) => {
-  const {
-    id,
-    title,
-    imageUrl,
-    price,
-    description,
-  } = req.body;
-  const product = new Product(title, imageUrl, price, description, id);
-  product.save()
-    .then((result) => {
-      res.json(result);
-      console.info(`Updated product`);
-    })
-    .catch((err) => console.error(`Error in updating product: ${err}`));
+getEditProduct = async (req, res) => {
+  try {
+    const editMode = req.query.editing;
+    if (!editMode) {
+      return res.redirect('/');
+    }
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.redirect('/');
+    }
+    res.json(product);
+  } catch (e) {
+    console.error(`Error in getEditProduct: ${e}`);
+  }
 };
 
-exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then((products) => {
-      res.json(products);
-    })
-    .catch((err) => console.error(`Error in fetching all products: ${err}`));
+postEditProduct = async (req, res) => {
+  try {
+    const {
+      id,
+      title,
+      imageUrl,
+      price,
+      description,
+    } = req.body;
+
+    const product = await Product.findById(id);
+
+    product.title = title;
+    product.imageUrl = imageUrl;
+    product.price = price;
+    product.description = description;
+
+    const result = await product.save();
+    res.json(result);
+    console.info(`Updated product: ${result}`);
+  } catch (e) {
+    console.error(`Error in updating product: ${e}`);
+  }
 };
 
-exports.deleteProduct = async (req, res, next) => {
+getProducts = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (e) {
+    console.error(`Error in fetching all products: ${e}`);
+  }
+};
+
+deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await Product.deleteById(id);
+    await Product.findByIdAndDelete(id);
     console.log(`Product ${id} has been deleted`);
     res.status(200).json({ message: 'Product deleted successfully' });
   } catch (err) {
@@ -74,3 +79,5 @@ exports.deleteProduct = async (req, res, next) => {
     res.status(500).json({ message: 'Failed to delete product' });
   }
 };
+
+module.exports = { postAddProduct, getEditProduct, postEditProduct, getProducts, deleteProduct };
