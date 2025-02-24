@@ -1,6 +1,6 @@
 const Product = require('../models/product');
 
-exports.getIndex = (req, res, next) => {
+getIndex = (req, res) => {
   Product.find()
     .then((products) => {
       res.json(products);
@@ -11,7 +11,7 @@ exports.getIndex = (req, res, next) => {
     });
 };
 
-exports.getProducts = (req, res, next) => {
+getProducts = (req, res, next) => {
   Product.find()
     .then((products) => {
       res.json(products);
@@ -22,7 +22,7 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-exports.getProductDetail = (req, res, next) => {
+getProductDetail = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId)
     .then((product) => {
@@ -31,16 +31,16 @@ exports.getProductDetail = (req, res, next) => {
     .catch((err) => console.error(`Error in getProductDetail: ${err}`));
 };
 
-exports.getCart = (req, res, next) => {
-  req.user
-    .getCart()
-    .then((products) => {
-      res.json(products);
-    })
-    .catch((err) => console.error(`Error in getCart: ${err}`));
+getCart = async (req, res) => {
+  try {
+    const { cart } = await req.user.populate('cart.items.product');
+    res.json(cart.items);
+  } catch (err) {
+    console.error(`Error in getCart: ${err}`);
+  }
 };
 
-exports.postCart = (req, res, next) => {
+postCart = (req, res) => {
   const { productId } = req.body;
   Product.findById(productId)
     .then((product) => {
@@ -51,17 +51,17 @@ exports.postCart = (req, res, next) => {
   });
 };
 
-exports.postCartDeleteItem = (req, res, next) => {
+postCartDeleteItem = (req, res) => {
   const { productId } = req.body;
   req.user
-    .deleteFromCart(productId)
+    .removeFromCart(productId)
     .then(result => {
       res.json(result);
     })
     .catch((err) => console.error(`Error in postCartDeleteItem: ${err}`));
 };
 
-exports.postOrder = (req, res, next) => {
+postOrder = (req, res) => {
   let fetchedCart;
   req.user
     .addOrder()
@@ -69,7 +69,7 @@ exports.postOrder = (req, res, next) => {
     .catch((err) => console.error(`Error in postOrder: ${err}`));
 };
 
-exports.getOrders = (req, res, next) => {
+getOrders = (req, res) => {
   req.user
     .getOrder()
     .then((orders) => {
@@ -80,9 +80,4 @@ exports.getOrders = (req, res, next) => {
     });
 };
 
-exports.getCheckout = (req, res, next) => {
-  res.render('shop/checkout', {
-    pageTitle: 'Your Checkout',
-    path: '/checkout',
-  });
-};
+module.exports = { getIndex, getProducts, getProductDetail, getCart, postCart, postCartDeleteItem, postOrder, getOrders };

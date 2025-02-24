@@ -28,7 +28,7 @@ const ProductDetail = () => {
       </div>
       <h3 className="product__price">EUR {product.price}</h3>
       <p className="product__description">{product.description}</p>
-       <AddToCart product={product} />
+      <AddToCart productId={product._id} />
     </main>
   );
 };

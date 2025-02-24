@@ -30,7 +30,7 @@ const Home = () => {
                 <p className="product__description">{product.description}</p>
               </div>
               <div className="card__actions">
-                <AddToCart product={product} />
+                <AddToCart productId={product._id} />
               </div>
             </article>
           ))}
