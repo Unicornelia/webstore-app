@@ -37,6 +37,13 @@ const Navbar = () => {
           {/*  </NavLink>*/}
           {/*</li>*/}
         </ul>
+        <ul>
+          <li className="main-header__item">
+            <NavLink to="/login" className={({ isActive }) => (isActive ? "active" : "")}>
+              Login
+            </NavLink>
+          </li>
+        </ul>
       </nav>
     </header>
   );

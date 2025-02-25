@@ -8,6 +8,7 @@ import AdminProducts from './pages/AdminProducts';
 import NotFound from './pages/NotFound';
 import ProductDetail from './components/ProductDetail';
 import Orders from './pages/Orders';
+import Login from './pages/Login';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path="/admin/add-product" element={<AddOrEditProduct />} />
           <Route path="/admin/edit-product/:productId" element={<AddOrEditProduct />} />
           <Route path="/admin/products" element={<AdminProducts />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

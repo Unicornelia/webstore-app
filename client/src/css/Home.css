@@ -22,7 +22,7 @@ form {
 .main-header {
     width: 100%;
     height: 3.5rem;
-    background-color: #005669;
+    background: linear-gradient(135deg, #1aa892, #1a9ca8);
     padding: 0 1.5rem;
     display: flex;
     align-items: center;
@@ -103,7 +103,7 @@ form {
 .mobile-nav__item a:active,
 .mobile-nav__item a:hover,
 .mobile-nav__item a.active {
-    background: #005669;
+    background: linear-gradient(135deg, #1aa892, #1a9ca8);
     color: white;
     border-radius: 3px;
 }
@@ -186,31 +186,32 @@ form {
 
 .btn {
     display: inline-block;
-    padding: 0.25rem 1rem;
+    padding: 0.5rem 1rem;
     text-decoration: none;
     font: inherit;
     border: 1px solid #1aa892;
     color: #1aa892;
     background: white;
-    border-radius: 3px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.8s;
 }
 
 .btn:hover,
 .btn:active {
-    background-color: #1aa892;
+    background-color: #38dac1;
     color: white;
 }
 
 .secondary {
-    background: #1aa892;
+    background: linear-gradient(135deg, #1aa892, #10808a);
     color: white;
     margin-top: 20px;
 }
 
 .secondary:hover {
-    background: #4cc2bf;
+    background: #38dac1;
+    transition: 0.9s;
 }
 
 /* Featured Products */

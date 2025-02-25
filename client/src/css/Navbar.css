@@ -2,7 +2,8 @@
 .main-header {
     width: 100%;
     height: 3.5rem;
-    background-color: #005669;
+    background: linear-gradient(135deg, #1aa892, #10808a);
+    color: white;
     padding: 0 1.5rem;
     display: flex;
     align-items: center;
@@ -10,8 +11,10 @@
 
 .main-header__nav {
     height: 100%;
-    display: none;
+    width: 100%;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .main-header__item-list {
@@ -24,6 +27,7 @@
 .main-header__item {
     margin: 0 1rem;
     padding: 0;
+    list-style: none;
 }
 
 .main-header__item a {
