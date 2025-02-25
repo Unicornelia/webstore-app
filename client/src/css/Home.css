@@ -150,64 +150,6 @@ form {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
 
-.card__header,
-.card__content {
-    padding: 1rem;
-}
-
-.card__header h1,
-.card__content h1,
-.card__content h2,
-.card__content p {
-    margin: 0;
-}
-
-.card__image {
-    width: 100%;
-}
-
-.card__image img {
-    width: 100%;
-}
-
-.card__actions {
-    padding: 1rem;
-    text-align: center;
-}
-
-.card__actions button,
-.card__actions a {
-    margin: 0 0.25rem;
-}
-
-.btn {
-    display: inline-block;
-    padding: 0.25rem 1rem;
-    text-decoration: none;
-    font: inherit;
-    border: 1px solid #005669;
-    color: #005669;
-    background: white;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.btn:hover,
-.btn:active {
-    background-color: #005669;
-    color: white;
-}
-
-.btn.danger {
-    color: red;
-    border-color: red;
-}
-
-.btn.danger:hover,
-.btn.danger:active {
-    background: red;
-    color: white;
-}
 
 @media (min-width: 768px) {
     .main-header__nav {
@@ -217,4 +159,92 @@ form {
     #side-menu-toggle {
         display: none;
     }
+}
+
+.home-container {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, #1aa892, #1a9ca8);
+    color: white;
+    padding: 60px 20px;
+    border-radius: 10px;
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    text-decoration: none;
+    font: inherit;
+    border: 1px solid #1aa892;
+    color: #1aa892;
+    background: white;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover,
+.btn:active {
+    background-color: #1aa892;
+    color: white;
+}
+
+.secondary {
+    background: #1aa892;
+    color: white;
+    margin-top: 20px;
+}
+
+.secondary:hover {
+    background: #4cc2bf;
+}
+
+/* Featured Products */
+.featured {
+    margin-top: 40px;
+}
+
+.featured h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.featured-products {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.product-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    text-align: center;
+}
+
+.product-card img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.product-card h3 {
+    font-size: 1rem;
+    margin-top: 10px;
 }

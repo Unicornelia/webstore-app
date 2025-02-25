@@ -1,6 +1,5 @@
-import '../css/Home.css'; // Ensure styling is included
-import "../css/Product.css";
-import AddToCart from '../components/AddToCart';
+import { Link } from 'react-router-dom';
+import '../css/Home.css';
 import { useEffect, useState } from 'react';
 
 const Home = () => {
@@ -13,31 +12,30 @@ const Home = () => {
       .catch((err) => console.error(err));
   }, []);
 
+  const getRandomProducts = (products, count = 3) => {
+    return [...products].sort(() => Math.random() - 0.5).slice(0, count);
+  };
+
   return (
-    <main>
-      {products.length > 0 ? (
-        <div className="grid">
-          {products.map((product) => (
-            <article key={product._id} className="card product-item">
-              <header className="card__header">
-                <h1 className="product__title">{product.title}</h1>
-              </header>
-              <div className="card__image">
-                <img src={product.imageUrl} alt={product.title} />
-              </div>
-              <div className="card__content">
-                <h2 className="product__price">EUR {product.price}</h2>
-                <p className="product__description">{product.description}</p>
-              </div>
-              <div className="card__actions">
-                <AddToCart productId={product._id} />
-              </div>
-            </article>
+    <main className="home-container">
+      <section className="hero">
+        <h1>Welcome to Our Store</h1>
+        <p>Discover unique and high-quality products, handpicked just for you.</p>
+        <Link to="/products" className="btn">Shop Now</Link>
+      </section>
+
+      <section className="featured">
+        <h2>Featured Products</h2>
+        <div className="featured-products">
+          {getRandomProducts(products).map((product) => (
+            <div className="product-card">
+              <img src={product.imageUrl} alt={product.title} />
+              <h3>{product.title}</h3>
+            </div>
           ))}
         </div>
-      ) : (
-        <h1>No Products Found!</h1>
-      )}
+        <Link to="/products" className="btn secondary">View All Products</Link>
+      </section>
     </main>
   );
 };

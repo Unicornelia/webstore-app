@@ -26,16 +26,16 @@ const Navbar = () => {
               Orders
             </NavLink>
           </li>
-          <li className="main-header__item">
-            <NavLink to="/admin/add-product" className={({ isActive }) => (isActive ? "active" : "")}>
-              Add Product
-            </NavLink>
-          </li>
-          <li className="main-header__item">
-            <NavLink to="/admin/products" className={({ isActive }) => (isActive ? "active" : "")}>
-              Admin Products
-            </NavLink>
-          </li>
+          {/*<li className="main-header__item">*/}
+          {/*  <NavLink to="/admin/add-product" className={({ isActive }) => (isActive ? "active" : "")}>*/}
+          {/*    Add Product*/}
+          {/*  </NavLink>*/}
+          {/*</li>*/}
+          {/*<li className="main-header__item">*/}
+          {/*  <NavLink to="/admin/products" className={({ isActive }) => (isActive ? "active" : "")}>*/}
+          {/*    Admin Products*/}
+          {/*  </NavLink>*/}
+          {/*</li>*/}
         </ul>
       </nav>
     </header>
