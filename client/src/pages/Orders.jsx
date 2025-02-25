@@ -13,6 +13,11 @@ const Orders = () => {
       .catch((err) => console.error('Error fetching orders:', err));
   }, []);
 
+
+  if (!orders) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <main className="orders-container">
       {orders.length === 0 ? (
@@ -23,12 +28,12 @@ const Orders = () => {
             <h2>Order</h2>
             <h4>ref: #{order._id}</h4>
             <div className="order-items">
-              {order.items.map((item) => (
-                <div key={item.title} className="order-item">
-                  <img src={item.imageUrl} alt={item.title} className="order-item-image" />
+              {order.products.map((product) => (
+                <div key={product.product.title} className="order-item">
+                  <img src={product.product.imageUrl} alt={product.product.title} className="order-item-image" />
                   <div className="order-item-info">
-                    <h3>{item.title}</h3>
-                    <p>Quantity: {item.quantity}</p>
+                    <h3>{product.product.title}</h3>
+                    <p>Quantity: {product.quantity}</p>
                   </div>
                 </div>
               ))}

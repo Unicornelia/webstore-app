@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import '../css/Cart.css'; // Ensure styling is included
+import '../css/Cart.css';
+import { useNavigate } from 'react-router-dom'; // Ensure styling is included
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
@@ -28,7 +30,6 @@ const Cart = () => {
       const updatedCart = await updatedCartItems.json();
 
       setCartItems(updatedCart);
-
     } catch (err) {
       console.error(`Error deleting from cart: ${err}`);
     }
@@ -36,9 +37,13 @@ const Cart = () => {
 
   const handleOrder = async () => {
     await fetch('http://localhost:3001/create-order', { method: 'POST' });
-
-    setCartItems([]); // Clear cart after order
+    navigate('/orders');
+    setCartItems([]);
   };
+
+  if (!cartItems) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <main className="centered">
@@ -49,7 +54,7 @@ const Cart = () => {
             {cartItems.map((item) => (
               <li key={item.product._id} className="cart__item">
                 <h1>{item.product.title}</h1>
-                <img style={{ width: '15%'}} src={item.product.imageUrl} alt={item.product.title} />
+                <img style={{ width: '15%' }} src={item.product.imageUrl} alt={item.product.title} />
                 <p>Quantity: {item.quantity}</p>
                 <h4>{item.product.price * item.quantity} €</h4>
                 <button className="btn danger" onClick={() => handleDelete(item.product._id)}>
