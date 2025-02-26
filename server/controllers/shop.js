@@ -4,7 +4,7 @@ const Order = require('../models/order');
 getIndex = async (req, res) => {
   try {
     const products = await Product.find();
-    res.status(200).json(products);
+    res.status(200).json({ products, isAuthenticated: req.cookies.isLoggedIn });
   } catch (e) {
     console.error(`Error in getIndex: ${e}`);
     res.status(500).json({ error: 'Failed to fetch products on index' });

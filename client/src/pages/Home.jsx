@@ -12,8 +12,7 @@ const Home = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data);
-        setProducts(data);
+        setProducts(data.products);
       })
       .catch((err) => console.error('Fetch error:', err));
   }, []);

@@ -6,10 +6,9 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3001/login', { credentials: 'include' })
+    fetch('http://localhost:3001/', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data, 'nav');
         setIsAuthenticated(data.isAuthenticated);
       })
       .catch((err) => console.error(err));
