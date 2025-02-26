@@ -6,6 +6,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { styleText } = require('util');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 // Import Config & Models
 const mongooseConnect = require('./config/database');
@@ -19,11 +20,22 @@ const authRoutes = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+//Initialize store on MongoDB
+const store = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: 'sessions',
+});
+
+// Catch store related errors
+store.on('error', function(error) {
+  console.error(`Error in store: ${error}`);
+});
+
 // ✅ Middleware Setup
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
+app.use(session({ secret: process.env.SESSION_SECRET, cookie: { maxAge: 1000 * 60 * 60 }, resave: false, saveUninitialized: false, store })); //setup sessions
 
 // ✅ CORS Setup (for frontend communication)
 app.use(cors({

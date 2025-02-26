@@ -3,6 +3,7 @@ const Order = require('../models/order');
 
 getIndex = async (req, res) => {
   try {
+    console.log(req.session);
     const products = await Product.find();
     res.status(200).json({ products, isAuthenticated: req.cookies.isLoggedIn });
   } catch (e) {
