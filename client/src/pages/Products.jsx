@@ -7,7 +7,7 @@ const Products = ( ) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/products')
+    fetch('http://localhost:3001/products', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error(err));

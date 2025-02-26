@@ -8,7 +8,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    fetch(`/products/${productId}`)
+    fetch(`/products/${productId}`, { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((err) => console.error(err));

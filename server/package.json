@@ -1,7 +1,7 @@
 {
   "name": "project",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index.js",
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/Unicornelia/node-project#readme",
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "cookie-parser": "^1.4.7",
     "eslint": "^9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",

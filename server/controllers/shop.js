@@ -4,7 +4,7 @@ const Order = require('../models/order');
 getIndex = async (req, res) => {
   try {
     const products = await Product.find();
-    res.json(products);
+    res.status(200).json(products);
   } catch (e) {
     console.error(`Error in getIndex: ${e}`);
     res.status(500).json({ error: 'Failed to fetch products on index' });
@@ -14,7 +14,7 @@ getIndex = async (req, res) => {
 getProducts = async (req, res) => {
   try {
     const products = await Product.find();
-    res.json(products);
+    res.status(200).json(products);
   } catch (e) {
     console.error(`Error in getProducts: ${e}`);
     res.status(500).json({ error: 'Failed to fetch products' });
@@ -34,7 +34,6 @@ getProductDetail = async (req, res) => {
 getCart = async (req, res) => {
   try {
     const { cart } = await req.user.populate('cart.items.product');
-    console.log(cart.items);
     res.json(cart.items);
   } catch (err) {
     console.error(`Error in getCart: ${err}`);

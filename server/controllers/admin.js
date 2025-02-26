@@ -1,5 +1,14 @@
 const Product = require('../models/product');
 
+getProducts = async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (e) {
+    console.error(`Error in fetching all products: ${e}`);
+  }
+};
+
 postAddProduct = async (req, res) => {
   try {
     const product = new Product({
@@ -60,15 +69,6 @@ postEditProduct = async (req, res) => {
   }
 };
 
-getProducts = async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.json(products);
-  } catch (e) {
-    console.error(`Error in fetching all products: ${e}`);
-  }
-};
-
 deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
@@ -81,4 +81,4 @@ deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = { postAddProduct, getEditProduct, postEditProduct, getProducts, deleteProduct };
+module.exports = { getProducts, postAddProduct, getEditProduct, postEditProduct, deleteProduct };

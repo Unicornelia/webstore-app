@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../css/Product.css'; // Ensure styling is included
+import '../css/Product.css';
 
 const AddOrEditProduct = () => {
   const { productId } = useParams();
@@ -16,7 +16,7 @@ const AddOrEditProduct = () => {
 
   useEffect(() => {
     if (editing) {
-      fetch(`http://localhost:3001/products/${productId}`)
+      fetch(`http://localhost:3001/products/${productId}`, { credentials: 'include' })
         .then((res) => res.json())
         .then((data) => {
           setFormData({

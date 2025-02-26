@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css/Cart.css';
-import { useNavigate } from 'react-router-dom'; // Ensure styling is included
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/cart')
+    fetch('http://localhost:3001/cart', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => setCartItems(data))
       .catch((err) => console.error(err));
@@ -22,7 +22,7 @@ const Cart = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete product');
+        throw new Error(`Failed to delete product: ${productId}`);
       }
 
       // Fetch updated cart items

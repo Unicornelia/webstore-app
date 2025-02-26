@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import '../css/Order.css';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/orders') // Adjust the API endpoint as needed
+    fetch('http://localhost:3001/orders', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
         setOrders(data);

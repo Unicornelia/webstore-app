@@ -23,6 +23,7 @@
 .order-card h4 {
     color: #6b9ca8;
 }
+
 .order-items {
     display: flex;
     flex-direction: column;

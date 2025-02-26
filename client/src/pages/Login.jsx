@@ -16,16 +16,18 @@ const Login = () => {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:3001/login', {
+      const response = await fetch('http://localhost:3001/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error('Invalid credentials');
+      if (!response.ok) throw new Error('Invalid credentials');
 
-      const data = await res.json();
-      localStorage.setItem('token', data.token); // Save token for auth
+      const data = await response.json();
+      console.log(data, 'data in login');
+      localStorage.setItem('isAuthenticated', data.isAuthenticated); // Save for auth
       navigate('/'); // Redirect to homepage
     } catch (err) {
       setError(err.message);

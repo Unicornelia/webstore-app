@@ -3,6 +3,7 @@ const AddToCart = ({ productId }) => {
     try {
       await fetch('http://localhost:3001/cart', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId }),
       });
