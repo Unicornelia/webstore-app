@@ -5,6 +5,7 @@ const path = require('path');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const { styleText } = require('util');
+const session = require('express-session');
 
 // Import Config & Models
 const mongooseConnect = require('./config/database');
@@ -22,6 +23,7 @@ const PORT = process.env.PORT || 3001;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
 
 // ✅ CORS Setup (for frontend communication)
 app.use(cors({

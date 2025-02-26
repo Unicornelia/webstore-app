@@ -25,7 +25,6 @@ const Login = () => {
 
       if (!response.ok) throw new Error('Invalid credentials');
 
-      const data = await response.json();
       // localStorage.setItem('isAuthenticated', data.isAuthenticated); // Save for auth
       await fetch('http://localhost:3001/login', { credentials: 'include' });
       navigate('/'); // Redirect to homepage
