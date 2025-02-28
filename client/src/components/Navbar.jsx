@@ -59,9 +59,9 @@ const Navbar = () => {
               Login
             </NavLink>
           </li>
-          <li className='main-header__item'>
-            <form action='/logout' method='POST'>
-              <button type='submit'>Logout</button>
+          <li className="main-header__item">
+            <form action="/logout" method="POST">
+              <button type="submit">Logout</button>
             </form>
           </li>
         </ul>
