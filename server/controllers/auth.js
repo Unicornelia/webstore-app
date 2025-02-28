@@ -19,9 +19,10 @@ postLogin = async (req, res) => {
   }
 };
 
-postLogout = async (req) => {
+postLogout = async (req, res) => {
   req.session.destroy((e) => {
     console.log(`Error: ${e} in logging out.`);
+    res.redirect('/');
   });
 };
 
