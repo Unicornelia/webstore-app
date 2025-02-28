@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound';
 import ProductDetail from './components/ProductDetail';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
+import { useState } from 'react';
 
 const App = () => {
   return (

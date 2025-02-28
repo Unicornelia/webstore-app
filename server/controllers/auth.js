@@ -19,11 +19,14 @@ postLogin = async (req, res) => {
   }
 };
 
-postLogout = async (req, res) => {
-  req.session.destroy((e) => {
+postLogout = (req, res) => {
+  try {
+    req.session.destroy(() => {
+      res.redirect('/');
+    });
+  } catch (e) {
     console.log(`Error: ${e} in logging out.`);
-    res.redirect('/');
-  });
+  }
 };
 
 module.exports = { getLogin, postLogin, postLogout };

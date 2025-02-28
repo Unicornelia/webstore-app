@@ -1,15 +1,19 @@
-import { Link } from "react-router-dom";
-import "../css/Product.css";
+import { Link } from 'react-router-dom';
+import '../css/Product.css';
 import AddToCart from '../components/AddToCart';
 import { useEffect, useState } from 'react';
 
-const Products = ( ) => {
+const Products = () => {
   const [products, setProducts] = useState([]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     fetch('http://localhost:3001/products', { credentials: 'include' })
       .then((res) => res.json())
-      .then((data) => setProducts(data.products))
+      .then((data) => {
+        setProducts(data.products);
+        setIsAuthenticated(data.isAuthenticated);
+      })
       .catch((err) => console.error(err));
   }, []);
 
@@ -33,7 +37,7 @@ const Products = ( ) => {
                 <Link to={`/products/${product._id}`} className="btn">
                   Details
                 </Link>
-                 <AddToCart productId={product._id} />
+                {isAuthenticated && <AddToCart productId={product._id} />}
               </div>
             </article>
           ))}

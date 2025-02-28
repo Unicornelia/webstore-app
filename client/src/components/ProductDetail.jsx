@@ -6,11 +6,15 @@ import AddToCart from '../components/AddToCart';
 const ProductDetail = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     fetch(`/products/${productId}`, { credentials: 'include' })
       .then((res) => res.json())
-      .then((data) => setProduct(data.product))
+      .then((data) => {
+        setProduct(data.product);
+        setIsAuthenticated(data.isAuthenticated);
+      })
       .catch((err) => console.error(err));
   }, [productId]);
 
@@ -28,7 +32,7 @@ const ProductDetail = () => {
       </div>
       <h3 className="product__price">EUR {product.price}</h3>
       <p className="product__description">{product.description}</p>
-      <AddToCart productId={product._id} />
+      {isAuthenticated && <AddToCart productId={product._id} />}
     </main>
   );
 };

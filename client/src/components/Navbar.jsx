@@ -28,18 +28,19 @@ const Navbar = () => {
               Products
             </NavLink>
           </li>
-          <li className="main-header__item">
-            <NavLink to="/cart" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Cart
-            </NavLink>
-          </li>
-          <li className="main-header__item">
-            <NavLink to="/orders" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Orders
-            </NavLink>
-          </li>
           {isAuthenticated && (
             <>
+              <li className="main-header__item">
+                <NavLink to="/cart" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Cart
+                </NavLink>
+              </li>
+              <li className="main-header__item">
+                <NavLink to="/orders" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Orders
+                </NavLink>
+              </li>
+
               <li className="main-header__item">
                 <NavLink to="/admin/add-product" className={({ isActive }) => (isActive ? 'active' : '')}>
                   Add Product
@@ -54,16 +55,24 @@ const Navbar = () => {
           )}
         </ul>
         <ul className="main-header__item-list">
-          <li className="main-header__item">
-            <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Login
-            </NavLink>
-          </li>
-          <li className="main-header__item">
-            <form action="/logout" method="POST">
-              <button type="submit">Logout</button>
-            </form>
-          </li>
+          {!isAuthenticated ? (
+            <>
+              <li className="main-header__item">
+                <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Login
+                </NavLink>
+              </li>
+            </>
+          ) : (
+            <>
+              <li className="main-header__item">
+                <form action="/logout" method="POST">
+                  <button type="submit">Logout</button>
+                </form>
+              </li>
+            </>
+          )
+          }
         </ul>
       </nav>
     </header>
