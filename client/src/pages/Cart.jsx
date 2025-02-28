@@ -9,7 +9,7 @@ const Cart = () => {
   useEffect(() => {
     fetch('http://localhost:3001/cart', { credentials: 'include' })
       .then((res) => res.json())
-      .then((data) => setCartItems(data))
+      .then((data) => setCartItems(data.cartItems))
       .catch((err) => console.error(err));
   }, []);
 
@@ -18,6 +18,7 @@ const Cart = () => {
       const response = await fetch('http://localhost:3001/cart-delete-item', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ productId }),
       });
 
@@ -26,7 +27,7 @@ const Cart = () => {
       }
 
       // Fetch updated cart items
-      const updatedCartItems = await fetch('http://localhost:3001/cart');
+      const updatedCartItems = await fetch('http://localhost:3001/cart', {credentials: 'include'});
       const updatedCart = await updatedCartItems.json();
 
       setCartItems(updatedCart);
@@ -36,7 +37,7 @@ const Cart = () => {
   };
 
   const handleOrder = async () => {
-    await fetch('http://localhost:3001/create-order', { method: 'POST' });
+    await fetch('http://localhost:3001/create-order', { method: 'POST', credentials: 'include' });
     navigate('/orders');
     setCartItems([]);
   };
@@ -63,7 +64,7 @@ const Cart = () => {
               </li>
             ))}
           </ul>
-          <hr />
+          <hr style={{ width: '100%' }} />
           <button className="btn" onClick={handleOrder}>
             Order
           </button>

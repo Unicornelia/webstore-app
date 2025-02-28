@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Product.css';
 
@@ -8,7 +8,7 @@ const AdminProducts = () => {
   useEffect(() => {
     fetch('http://localhost:3001/admin/products', { credentials: 'include' })
       .then((res) => res.json())
-      .then((data) => setProducts(data))
+      .then((data) => setProducts(data.products))
       .catch((err) => console.error(`Error fetching products: ${err}`));
   }, []);
 
@@ -18,6 +18,7 @@ const AdminProducts = () => {
     try {
       const response = await fetch(`http://localhost:3001/admin/delete-product/${productId}`, {
         method: 'DELETE',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
       });
 
@@ -26,7 +27,7 @@ const AdminProducts = () => {
       }
 
       // Fetch updated products list
-      const updatedProducts = await fetch('http://localhost:3001/admin/products');
+      const updatedProducts = await fetch('http://localhost:3001/admin/products', { credentials: 'include' });
       const productsData = await updatedProducts.json();
       setProducts(productsData); // Update state with new product list
 

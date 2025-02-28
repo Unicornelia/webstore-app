@@ -16,17 +16,21 @@ const AddOrEditProduct = () => {
 
   useEffect(() => {
     if (editing) {
-      fetch(`http://localhost:3001/products/${productId}`, { credentials: 'include' })
+      fetch(`http://localhost:3001/admin/edit-product/${productId}`, { credentials: 'include' })
         .then((res) => res.json())
         .then((data) => {
+          const product = data.products.filter((product => product._id === productId))[0]
           setFormData({
-            title: data.title || '',
-            imageUrl: data.imageUrl || '',
-            price: data.price || '',
-            description: data.description || '',
+            title: product.title || '',
+            imageUrl: product.imageUrl || '',
+            price: product.price || '',
+            description: product.description || '',
           });
         })
         .catch((err) => console.error('Error fetching product:', err));
+    } else {
+      fetch('http://localhost:3001/admin/add-product', { credentials: 'include' })
+        .then((res) => res.json());
     }
   }, [editing, productId]);
 
@@ -44,6 +48,7 @@ const AddOrEditProduct = () => {
       const response = await fetch(endpoint, {
         method,
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(responseBody),
       });
 

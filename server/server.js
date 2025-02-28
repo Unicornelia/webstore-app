@@ -32,10 +32,16 @@ store.on('error', function(error) {
 });
 
 // ✅ Middleware Setup
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(session({ secret: process.env.SESSION_SECRET, cookie: { maxAge: 1000 * 60 * 60 }, resave: false, saveUninitialized: false, store })); //setup sessions
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  cookie: { maxAge: 1000 * 60 * 60 * 24, sameSite: 'lax' },
+  resave: false,
+  saveUninitialized: false,
+  store,
+})); //setup sessions
 
 // ✅ CORS Setup (for frontend communication)
 app.use(cors({
@@ -48,18 +54,6 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
-});
-
-// ✅ Attach User to Request (Middleware)
-app.use(async (req, res, next) => {
-  const userId = process.env.USER_ID;
-  try {
-    const user = await User.findById(userId);
-    req.user = user;
-    next();
-  } catch (err) {
-    console.error(styleText('redBright', `Error: ${err} in finding user with id: ${userId}`));
-  }
 });
 
 // ✅ API Routes
@@ -79,21 +73,21 @@ app.get('*', (req, res) => {
 // ✅ Connect to Database and Start Server
 mongooseConnect(() => {
   console.info(styleText('blueBright', `🔋 Connected to Mongoose 🔋`));
-
   User.findOne().then(user => {
     if (!user) {
+      console.log('Creating new user...');
       const user = new User({
         name: 'Rosa',
         email: 'rosa@parks.com',
-        cart: [],
+        cart: {
+          items: []
+        },
       });
-
       user.save()
         .then(r => console.log(`User created: ${r}`))
         .catch(err => console.error(`Error in user save: ${err}`));
     }
   });
-
   app.listen(PORT, () => {
     console.log(styleText('cyanBright', `📡 Server running on http://localhost:${PORT} 📡`));
   });

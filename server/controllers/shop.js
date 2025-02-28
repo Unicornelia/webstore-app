@@ -1,11 +1,11 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
+const User = require('../models/user');
 
 getIndex = async (req, res) => {
   try {
-    console.log(req.session);
     const products = await Product.find();
-    res.status(200).json({ products, isAuthenticated: req.cookies.isLoggedIn });
+    res.status(200).json({ products, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in getIndex: ${e}`);
     res.status(500).json({ error: 'Failed to fetch products on index' });
@@ -15,7 +15,7 @@ getIndex = async (req, res) => {
 getProducts = async (req, res) => {
   try {
     const products = await Product.find();
-    res.status(200).json(products);
+    res.status(200).json({ products, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in getProducts: ${e}`);
     res.status(500).json({ error: 'Failed to fetch products' });
@@ -26,7 +26,7 @@ getProductDetail = async (req, res) => {
   try {
     const { productId } = req.params;
     const product = await Product.findById(productId);
-    res.json(product);
+    res.status(200).json({ product, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in getProductDetail: ${e}`);
   }
@@ -34,8 +34,11 @@ getProductDetail = async (req, res) => {
 
 getCart = async (req, res) => {
   try {
-    const { cart } = await req.user.populate('cart.items.product');
-    res.json(cart.items);
+    const userId = req.session.user._id.toString();
+    const user = await User.findById(userId);
+    const { cart } = await user.populate('cart.items.product');
+    const cartItems = cart.items;
+    res.status(200).json({ cartItems, isAuthenticated: req.session.isAuthenticated });
   } catch (err) {
     console.error(`Error in getCart: ${err}`);
   }
@@ -43,11 +46,13 @@ getCart = async (req, res) => {
 
 postCart = async (req, res) => {
   try {
+    const userId = req.session.user._id.toString();
+    const user = await User.findById(userId);
     const { productId } = req.body;
     const product = await Product.findById(productId);
-    const result = await req.user.addToCart(product);
+    const result = await user.addToCart(product);
     console.log(`Result in postCart: ${result}`);
-    res.json(result);
+    res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in postCart: ${e}`);
   }
@@ -55,9 +60,11 @@ postCart = async (req, res) => {
 
 postCartDeleteItem = async (req, res) => {
   try {
+    const userId = req.session.user._id.toString();
+    const user = await User.findById(userId);
     const { productId } = req.body;
-    const result = await req.user.removeFromCart(productId);
-    res.json(result);
+    const result = await user.removeFromCart(productId);
+    res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in postCartDeleteItem: ${e}`);
   }
@@ -65,7 +72,9 @@ postCartDeleteItem = async (req, res) => {
 
 postOrder = async (req, res) => {
   try {
-    const { cart } = await req.user.populate('cart.items.product');
+    const userId = req.session.user._id.toString();
+    const user = await User.findById(userId);
+    const { cart } = await user.populate('cart.items.product');
     const products = cart.items.map(item => {
       return {
         quantity: item.quantity,
@@ -74,23 +83,23 @@ postOrder = async (req, res) => {
     });
     const order = new Order({
       user: {
-        userId: req.user,
-        name: req.user.name,
+        userId,
+        name: req.session.user.name,
       },
       products,
     });
     await order.save();
-    await req.user.clearCart();
-    res.json(order);
-  } catch (err) {
-    console.error(`Error in postOrder: ${err}`);
+    await user.clearCart();
+    res.status(201).json({ order, isAuthenticated: req.session.isAuthenticated });
+  } catch (e) {
+    console.error(`Error in postOrder: ${e}`);
   }
 };
 
 getOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ 'user.userId': req.user._id });
-    res.json(orders);
+    const orders = await Order.find({ 'user.userId': req.session.user._id });
+    res.status(200).json({ orders, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in getOrders: ${e}`);
   }

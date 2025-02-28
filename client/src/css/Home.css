@@ -58,6 +58,7 @@ form {
 }
 
 .centered {
+    display: grid;
     text-align: center;
     justify-items: center;
 }

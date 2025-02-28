@@ -8,7 +8,7 @@ const Orders = () => {
     fetch('http://localhost:3001/orders', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
-        setOrders(data);
+        setOrders(data.orders);
       })
       .catch((err) => console.error('Error fetching orders:', err));
   }, []);

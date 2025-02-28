@@ -1,9 +1,18 @@
 const Product = require('../models/product');
+const User = require('../models/user');
+
+getAddProduct = (req, res) => {
+  try {
+    res.status(200).json({ isAuthenticated: true, editing: false });
+  } catch (e) {
+    console.error(`Error in getAddProduct: ${e}`);
+  }
+};
 
 getProducts = async (req, res) => {
   try {
     const products = await Product.find();
-    res.json(products);
+    res.status(200).json({ products, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in fetching all products: ${e}`);
   }
@@ -16,13 +25,13 @@ postAddProduct = async (req, res) => {
       imageUrl: req.body.imageUrl,
       price: req.body.price,
       description: req.body.description,
-      userId: req.user._id,
+      userId: req.session.user._id,
     });
     const result = await product.save();
-    res.json(result);
+    res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });
     console.info(`Added new product: ${result}`);
   } catch (e) {
-    console.error(`Error in postAddProduct: ${e}`);
+    console.error(`Error in postAddProduct: ${e.message}`);
   }
 };
 
@@ -38,7 +47,7 @@ getEditProduct = async (req, res) => {
     if (!product) {
       return res.redirect('/');
     }
-    res.json(product);
+    res.status(200).json({ product, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in getEditProduct: ${e}`);
   }
@@ -62,7 +71,7 @@ postEditProduct = async (req, res) => {
     product.description = description;
 
     const result = await product.save();
-    res.json(result);
+    res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });
     console.info(`Updated product: ${result}`);
   } catch (e) {
     console.error(`Error in updating product: ${e}`);
@@ -74,11 +83,11 @@ deleteProduct = async (req, res) => {
   try {
     await Product.findByIdAndDelete(id);
     console.log(`Product ${id} has been deleted`);
-    res.status(200).json({ message: 'Product deleted successfully' });
-  } catch (err) {
-    console.error(`Error deleting product: ${err}`);
+    res.status(201).json({ message: 'Product deleted successfully' });
+  } catch (e) {
+    console.error(`Error deleting product: ${e}`);
     res.status(500).json({ message: 'Failed to delete product' });
   }
 };
 
-module.exports = { getProducts, postAddProduct, getEditProduct, postEditProduct, deleteProduct };
+module.exports = { getAddProduct, getProducts, postAddProduct, getEditProduct, postEditProduct, deleteProduct };
