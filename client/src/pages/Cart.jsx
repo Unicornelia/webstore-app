@@ -30,7 +30,7 @@ const Cart = () => {
       const updatedCartItems = await fetch('http://localhost:3001/cart', {credentials: 'include'});
       const updatedCart = await updatedCartItems.json();
 
-      setCartItems(updatedCart);
+      setCartItems(updatedCart.cartItems);
     } catch (err) {
       console.error(`Error deleting from cart: ${err}`);
     }

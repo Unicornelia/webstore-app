@@ -43,6 +43,18 @@ app.use(session({
   store,
 })); //setup sessions
 
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((e) => console.error(`Error in user save: ${e}`));
+});
+
 // ✅ CORS Setup (for frontend communication)
 app.use(cors({
   origin: 'http://localhost:3000',
@@ -80,7 +92,7 @@ mongooseConnect(() => {
         name: 'Rosa',
         email: 'rosa@parks.com',
         cart: {
-          items: []
+          items: [],
         },
       });
       user.save()

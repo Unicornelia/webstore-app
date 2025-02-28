@@ -13,9 +13,6 @@ const Login = () => {
         if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
         return res.json();
       })
-      .then((data) => {
-        console.log(data, 'in login data');
-      })
       .catch((err) => console.error('Fetch error in login:', err));
   }, []);
 

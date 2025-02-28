@@ -1,5 +1,4 @@
 const Product = require('../models/product');
-const User = require('../models/user');
 
 getAddProduct = (req, res) => {
   try {
@@ -25,7 +24,7 @@ postAddProduct = async (req, res) => {
       imageUrl: req.body.imageUrl,
       price: req.body.price,
       description: req.body.description,
-      userId: req.session.user._id,
+      userId: req.user._id,
     });
     const result = await product.save();
     res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });

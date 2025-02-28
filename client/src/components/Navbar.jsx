@@ -6,7 +6,7 @@ const Navbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3001/', { credentials: 'include' })
+    fetch('http://localhost:3001', { credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
         setIsAuthenticated(data.isAuthenticated);
