@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 import ProductDetail from './components/ProductDetail';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
-import { useState } from 'react';
+import SignUp from './pages/SignUp';
 
 const App = () => {
   return (
@@ -26,6 +26,7 @@ const App = () => {
           <Route path="/admin/edit-product/:productId" element={<AddOrEditProduct />} />
           <Route path="/admin/products" element={<AdminProducts />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

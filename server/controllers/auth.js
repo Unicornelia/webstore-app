@@ -5,6 +5,10 @@ getLogin = (req, res) => {
   res.status(200).json({ isAuthenticated: false });
 };
 
+getSignUp = (req, res) => {
+  res.status(200).json({ isAuthenticated: false });
+};
+
 postLogin = async (req, res) => {
   const userId = process.env.USER_ID;
   const user = await User.findById(userId);
@@ -19,6 +23,9 @@ postLogin = async (req, res) => {
   }
 };
 
+postSignUp = async (req, res) => {
+};
+
 postLogout = (req, res) => {
   try {
     req.session.destroy(() => {
@@ -29,4 +36,4 @@ postLogout = (req, res) => {
   }
 };
 
-module.exports = { getLogin, postLogin, postLogout };
+module.exports = { getLogin, getSignUp, postLogin, postSignUp, postLogout };

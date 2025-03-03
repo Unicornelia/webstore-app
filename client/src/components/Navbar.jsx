@@ -40,7 +40,6 @@ const Navbar = () => {
                   Orders
                 </NavLink>
               </li>
-
               <li className="main-header__item">
                 <NavLink to="/admin/add-product" className={({ isActive }) => (isActive ? 'active' : '')}>
                   Add Product
@@ -60,6 +59,11 @@ const Navbar = () => {
               <li className="main-header__item">
                 <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
                   Login
+                </NavLink>
+              </li>
+              <li className="main-header__item">
+                <NavLink to="/signup" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Sign Up
                 </NavLink>
               </li>
             </>
