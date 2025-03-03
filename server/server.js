@@ -85,22 +85,7 @@ app.get('*', (req, res) => {
 // ✅ Connect to Database and Start Server
 mongooseConnect(() => {
   console.info(styleText('blueBright', `🔋 Connected to Mongoose 🔋`));
-  User.findOne().then(user => {
-    if (!user) {
-      console.log('Creating new user...');
-      const user = new User({
-        name: 'Rosa',
-        email: 'rosa@parks.com',
-        cart: {
-          items: [],
-        },
-      });
-      user.save()
-        .then(r => console.log(`User created: ${r}`))
-        .catch(err => console.error(`Error in user save: ${err}`));
-    }
-  });
   app.listen(PORT, () => {
     console.log(styleText('cyanBright', `📡 Server running on http://localhost:${PORT} 📡`));
   });
-}).catch(err => console.log(err));
+}).catch(e => console.error(e));

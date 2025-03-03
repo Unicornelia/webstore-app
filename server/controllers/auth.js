@@ -19,11 +19,32 @@ postLogin = async (req, res) => {
       res.redirect('/');
     });
   } catch (e) {
-    `Error: ${e} in finding user with id: ${userId}`;
+    console.error(`Error: ${e} in finding user with id: ${userId}`);
   }
 };
 
 postSignUp = async (req, res) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
+
+  User.findOne({ email }).then((userDoc) => {
+    if (userDoc) {
+      console.info('User already exists!');
+      return res.redirect('/signup');
+    }
+
+    const user = new User({
+      name, email, password, cart: { items: [] },
+    });
+
+    return user.save();
+  }).then((result) => {
+    console.info(`Sign up successful: ${result}`);
+    res.redirect('/login');
+  })
+    .catch(e => console.error(`Error during signup: ${e}`));
 };
 
 postLogout = (req, res) => {
@@ -32,7 +53,7 @@ postLogout = (req, res) => {
       res.redirect('/');
     });
   } catch (e) {
-    console.log(`Error: ${e} in logging out.`);
+    console.error(`Error: ${e} in logging out.`);
   }
 };
 
