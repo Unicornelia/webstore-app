@@ -1,5 +1,6 @@
 require('dotenv').config();
 const User = require('../models/user');
+const bcrypt = require('bcryptjs');
 
 getLogin = (req, res) => {
   res.status(200).json({ isAuthenticated: false });
@@ -29,22 +30,25 @@ postSignUp = async (req, res) => {
   const password = req.body.password;
   const confirmPassword = req.body.confirmPassword;
 
-  User.findOne({ email }).then((userDoc) => {
+  try {
+    const userDoc = await User.findOne({ email });
+
     if (userDoc) {
       console.info('User already exists!');
       return res.redirect('/signup');
+    } else {
+      const hashedPassword = await bcrypt.hash(password, 12);
+      const user = new User({
+        name, email, password: hashedPassword, cart: { items: [] },
+      });
+
+      await user.save();
+      console.info('Sign up successful');
+      res.redirect('/login');
     }
-
-    const user = new User({
-      name, email, password, cart: { items: [] },
-    });
-
-    return user.save();
-  }).then((result) => {
-    console.info(`Sign up successful: ${result}`);
-    res.redirect('/login');
-  })
-    .catch(e => console.error(`Error during signup: ${e}`));
+  } catch (e) {
+    console.error(`Error during signup: ${e}`);
+  }
 };
 
 postLogout = (req, res) => {
