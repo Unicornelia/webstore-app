@@ -33,6 +33,7 @@
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
+    cursor: text;
 }
 
 button {
@@ -51,6 +52,7 @@ button {
 
 button:hover {
     background: #38dac1;
+    cursor: pointer;
 }
 
 .error {

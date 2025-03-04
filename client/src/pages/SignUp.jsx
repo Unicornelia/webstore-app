@@ -49,6 +49,7 @@ const SignUp = () => {
             value={formData.name}
             onChange={handleChange}
             required
+            autoComplete="off"
           />
         </div>
 
@@ -61,6 +62,7 @@ const SignUp = () => {
             value={formData.email}
             onChange={handleChange}
             required
+            autoComplete="off"
           />
         </div>
 
