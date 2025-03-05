@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const { styleText } = require('util');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const csrf = require('csurf');
 
 // Import Config & Models
 const mongooseConnect = require('./config/database');
@@ -31,6 +32,8 @@ store.on('error', function(error) {
   console.error(`Error in store: ${error}`);
 });
 
+const csrfProtection = csrf({});
+
 // ✅ Middleware Setup
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -42,6 +45,7 @@ app.use(session({
   saveUninitialized: false,
   store,
 })); //setup sessions
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   if (!req.session.user) {
