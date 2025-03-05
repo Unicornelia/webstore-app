@@ -2,7 +2,7 @@ const Product = require('../models/product');
 
 getAddProduct = (req, res) => {
   try {
-    res.status(200).json({ isAuthenticated: true, editing: false });
+    res.status(200).json({ isAuthenticated: req.session.isAuthenticated, editing: false });
   } catch (e) {
     console.error(`Error in getAddProduct: ${e}`);
   }

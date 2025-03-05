@@ -3,21 +3,44 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 
 getLogin = (req, res) => {
-  res.status(200).json({ isAuthenticated: false });
+  try {
+    res.json({ isAuthenticated: req.session.isAuthenticated });
+  } catch (e) {
+    console.error(`Error in getLogin: ${e}`);
+  }
 };
 
 getSignUp = (req, res) => {
-  res.status(200).json({ isAuthenticated: false });
+  try {
+    res.json({ isAuthenticated: req.session.isAuthenticated });
+  } catch (e) {
+    console.error(`Error in getSignUp: ${e}`);
+  }
 };
 
 postLogin = async (req, res) => {
-  const userId = process.env.USER_ID;
-  const user = await User.findById(userId);
+  const email = req.body.email;
+  const password = req.body.password;
   try {
-    req.session.isAuthenticated = true;
-    req.session.user = user;
-    req.session.save(() => {
-      res.redirect('/');
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.redirect('/login');
+    }
+    bcrypt.compare(password, user.password, (e, isMatch) => {
+      if (isMatch) {
+        console.log('The passwords are matching!');
+        req.session.isAuthenticated = true;
+        req.session.user = user;
+        return req.session.save((e) => {
+          console.log(e);
+          res.redirect('/');
+        });
+      }
+      if (e) {
+        console.log(`Error in bcrypt compare: ${e}`);
+        res.redirect('/');
+      }
     });
   } catch (e) {
     console.error(`Error: ${e} in finding user with id: ${userId}`);
