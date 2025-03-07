@@ -3,7 +3,7 @@ import '../css/Product.css';
 import AddToCart from '../components/AddToCart';
 import { useEffect, useState } from 'react';
 
-const Products = () => {
+const Products = ({csrfToken}) => {
   const [products, setProducts] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -19,7 +19,7 @@ const Products = () => {
 
   return (
     <main>
-      {products.length > 0 ? (
+      {products?.length > 0 ? (
         <div className="grid">
           {products.map((product) => (
             <article key={product._id} className="card product-item">
@@ -37,7 +37,7 @@ const Products = () => {
                 <Link to={`/products/${product._id}`} className="btn">
                   Details
                 </Link>
-                {isAuthenticated && <AddToCart productId={product._id} />}
+                {isAuthenticated && <AddToCart productId={product._id} csrfToken={csrfToken} />}
               </div>
             </article>
           ))}

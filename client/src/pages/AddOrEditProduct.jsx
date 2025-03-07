@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import '../css/Product.css';
 
-const AddOrEditProduct = () => {
+const AddOrEditProduct = ({ csrfToken }) => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const editing = !!productId;
-
   const [formData, setFormData] = useState({
     title: '',
     imageUrl: '',
@@ -19,7 +18,7 @@ const AddOrEditProduct = () => {
       fetch(`http://localhost:3001/admin/edit-product/${productId}`, { credentials: 'include' })
         .then((res) => res.json())
         .then((data) => {
-          const product = data.products.filter((product => product._id === productId))[0]
+          const product = data.products.filter((product => product._id === productId))[0];
           setFormData({
             title: product.title || '',
             imageUrl: product.imageUrl || '',
@@ -41,13 +40,13 @@ const AddOrEditProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = editing ? `http://localhost:3001/admin/edit-product` : 'http://localhost:3001/admin/add-product';
-    const method = editing ? 'POST' : 'POST';
+    const method = 'POST';
     let responseBody = editing ? { ...formData, id: productId } : formData;
 
     try {
       const response = await fetch(endpoint, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
         credentials: 'include',
         body: JSON.stringify(responseBody),
       });
@@ -83,7 +82,6 @@ const AddOrEditProduct = () => {
           <label htmlFor="description">Description</label>
           <textarea name="description" id="description" rows="5" value={formData.description} onChange={handleChange} required />
         </div>
-
         <button className="btn" type="submit">
           {editing ? 'Update Product' : 'Add Product'}
         </button>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Product.css';
 
-const AdminProducts = () => {
+const AdminProducts = ({ csrfToken }) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const AdminProducts = () => {
       const response = await fetch(`http://localhost:3001/admin/delete-product/${productId}`, {
         method: 'DELETE',
         credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
       });
 
       if (!response.ok) {
@@ -27,10 +27,12 @@ const AdminProducts = () => {
       }
 
       // Fetch updated products list
-      const updatedProducts = await fetch('http://localhost:3001/admin/products', { credentials: 'include' });
+      const updatedProducts = await fetch('http://localhost:3001/admin/products', {
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
+      });
       const productsData = await updatedProducts.json();
       setProducts(productsData); // Update state with new product list
-
     } catch (err) {
       console.error(`Error deleting product: ${err}`);
     }

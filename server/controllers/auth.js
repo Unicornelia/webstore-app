@@ -23,27 +23,26 @@ postLogin = async (req, res) => {
   const password = req.body.password;
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.redirect('/login');
     }
     bcrypt.compare(password, user.password, (e, isMatch) => {
       if (isMatch) {
-        console.log('The passwords are matching!');
         req.session.isAuthenticated = true;
         req.session.user = user;
         return req.session.save((e) => {
-          console.log(e);
+          console.error(`Error: ${e}`);
           res.redirect('/');
         });
       }
+      res.redirect('/login');
       if (e) {
         console.log(`Error in bcrypt compare: ${e}`);
         res.redirect('/');
       }
     });
   } catch (e) {
-    console.error(`Error: ${e} in finding user with id: ${userId}`);
+    console.error(`Error: ${e} in finding user with email: ${email}`);
   }
 };
 

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import '../css/Product.css';
 import AddToCart from '../components/AddToCart';
 
-const ProductDetail = () => {
+const ProductDetail = ({ csrfToken }) => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,7 +32,7 @@ const ProductDetail = () => {
       </div>
       <h3 className="product__price">EUR {product.price}</h3>
       <p className="product__description">{product.description}</p>
-      {isAuthenticated && <AddToCart productId={product._id} />}
+      {isAuthenticated && <AddToCart productId={product._id} csrfToken={csrfToken} />}
     </main>
   );
 };

@@ -1,82 +1,75 @@
-import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import '../css/Navbar.css';
 
-const Navbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const Navbar = ({ csrfToken, isAuthenticated, setIsAuthenticated }) => {
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('http://localhost:3001', { credentials: 'include' })
-      .then((res) => res.json())
-      .then((data) => {
-        setIsAuthenticated(data.isAuthenticated);
-      })
-      .catch((err) => console.error(err));
-  }, []);
+  const handleLogout = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:3001/logout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
+        credentials: 'include',
+      });
+      if (!response.ok) throw new Error('Invalid credentials');
+      setIsAuthenticated(false);
+      navigate('/');
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const publicLinks = [
+    { to: '/', label: 'Shop', exact: true },
+    { to: '/products', label: 'Products' },
+  ];
+
+  const privateLinks = [
+    { to: '/cart', label: 'Cart' },
+    { to: '/orders', label: 'Orders' },
+    { to: '/admin/add-product', label: 'Add Product' },
+    { to: '/admin/products', label: 'Admin Products' },
+  ];
+
+  const authLinks = isAuthenticated
+    ? [{ to: '/logout', label: 'Logout', isForm: true }]
+    : [
+      { to: '/login', label: 'Login' },
+      { to: '/signup', label: 'Sign Up' },
+    ];
 
   return (
     <header className="main-header">
       <nav className="main-header__nav">
         <ul className="main-header__item-list">
-          <li className="main-header__item">
-            <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : '')}>
-              Shop
-            </NavLink>
-          </li>
-          <li className="main-header__item">
-            <NavLink to="/products" className={({ isActive }) => (isActive ? 'active' : '')}>
-              Products
-            </NavLink>
-          </li>
-          {isAuthenticated && (
-            <>
-              <li className="main-header__item">
-                <NavLink to="/cart" className={({ isActive }) => (isActive ? 'active' : '')}>
-                  Cart
-                </NavLink>
-              </li>
-              <li className="main-header__item">
-                <NavLink to="/orders" className={({ isActive }) => (isActive ? 'active' : '')}>
-                  Orders
-                </NavLink>
-              </li>
-              <li className="main-header__item">
-                <NavLink to="/admin/add-product" className={({ isActive }) => (isActive ? 'active' : '')}>
-                  Add Product
-                </NavLink>
-              </li>
-              <li className="main-header__item">
-                <NavLink to="/admin/products" className={({ isActive }) => (isActive ? 'active' : '')}>
-                  Admin Products
-                </NavLink>
-              </li>
-            </>
-          )}
+          {[...publicLinks, ...(isAuthenticated ? privateLinks : [])].map(({ to, label, exact }) => (
+            <li key={to} className="main-header__item">
+              <NavLink to={to} end={exact} className={({ isActive }) => (isActive ? 'active' : '')}>
+                {label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
+
         <ul className="main-header__item-list">
-          {!isAuthenticated ? (
-            <>
-              <li className="main-header__item">
-                <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
-                  Login
-                </NavLink>
-              </li>
-              <li className="main-header__item">
-                <NavLink to="/signup" className={({ isActive }) => (isActive ? 'active' : '')}>
-                  Sign Up
-                </NavLink>
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="main-header__item">
-                <form action="/logout" method="POST">
-                  <button type="submit">Logout</button>
+          {authLinks.map(({ to, label, isForm }) =>
+            isForm ? (
+              <li key={to} className="main-header__item">
+                <form onSubmit={handleLogout}>
+                  <input type="hidden" name="_csrf" value={csrfToken} />
+                  <button type="submit">{label}</button>
                 </form>
               </li>
-            </>
-          )
-          }
+            ) : (
+              <li key={to} className="main-header__item">
+                <NavLink to={to} className={({ isActive }) => (isActive ? 'active' : '')}>
+                  {label}
+                </NavLink>
+              </li>
+            ),
+          )}
         </ul>
       </nav>
     </header>

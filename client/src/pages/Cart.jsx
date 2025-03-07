@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Cart.css';
 
-const Cart = () => {
+const Cart = ({ csrfToken }) => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
 
@@ -17,19 +17,16 @@ const Cart = () => {
     try {
       const response = await fetch('http://localhost:3001/cart-delete-item', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
         credentials: 'include',
         body: JSON.stringify({ productId }),
       });
-
       if (!response.ok) {
         throw new Error(`Failed to delete product: ${productId}`);
       }
-
       // Fetch updated cart items
-      const updatedCartItems = await fetch('http://localhost:3001/cart', {credentials: 'include'});
+      const updatedCartItems = await fetch('http://localhost:3001/cart', { credentials: 'include' });
       const updatedCart = await updatedCartItems.json();
-
       setCartItems(updatedCart.cartItems);
     } catch (err) {
       console.error(`Error deleting from cart: ${err}`);
@@ -37,18 +34,18 @@ const Cart = () => {
   };
 
   const handleOrder = async () => {
-    await fetch('http://localhost:3001/create-order', { method: 'POST', credentials: 'include' });
+    await fetch('http://localhost:3001/create-order', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
+    });
     navigate('/orders');
     setCartItems([]);
   };
 
-  if (!cartItems) {
-    return <h1>Loading...</h1>;
-  }
-
   return (
     <main className="centered">
-      {cartItems.length > 0 ? (
+      {cartItems?.length > 0 ? (
         <>
           <h1>Your Shopping Cart</h1>
           <ul className="cart__item-list">

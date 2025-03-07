@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/SignUp.css';
 
-const SignUp = () => {
+const SignUp = ({ csrfToken }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,24 +22,22 @@ const SignUp = () => {
     try {
       const response = await fetch('http://localhost:3001/signup', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
         credentials: 'include',
         body: JSON.stringify(formData),
       });
-
-      if (response.ok) {
-        navigate('/login'); // Redirect to login after successful signup
-      } else {
-        console.error('Signup failed');
-      }
+      if (!response.ok) throw new Error('Signup failed!');
+      alert('Successful signup!');
+      navigate('/login'); // Redirect to /login after successful signup
     } catch (err) {
-      console.error('Error signing up:', err);
+      setError(err.message);
     }
   };
 
   return (
     <main className="signup-container">
       <h2>Create an Account</h2>
+      {error && <p className="error">{error}</p>}
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-control">
           <label htmlFor="name">Name</label>
@@ -89,7 +88,6 @@ const SignUp = () => {
             required
           />
         </div>
-
         <button type="submit" className="btn">Sign Up</button>
       </form>
     </main>
