@@ -3,14 +3,14 @@
 Node refresher course that mostly is based on the course from [Udemy](https://www.udemy.com/course/nodejs-the-complete-guide/)
 This project includes among many things:
 
-- Node.js ecosystem review
-- server-side apps
-- integrated React frontend for better UI
+- Node.js server
+- integrated React frontend for better UI (client)
 - MVC
 - REST
-- databases (MongoDB)
-- Authentication (bcrypt and sessions)
+- databases (MongoDB-Mongoose)
+- Authentication (bcrypt and sessions) and Authorization
 - CSRF
 - APIs
+- SendGrid for email sending
 
 ![](https://github.com/Unicornelia/node-project/blob/master/webshop-nodeproject.gif)
