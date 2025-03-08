@@ -1,6 +1,14 @@
 require('dotenv').config();
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sendGridTransport = require('nodemailer-sendgrid-transport');
+
+const transporter = nodemailer.createTransport(sendGridTransport({
+  auth: {
+    api_key: process.env.SENDGRID_KEY,
+  }
+}));
 
 getLogin = (req, res) => {
   try {
@@ -56,7 +64,6 @@ postSignUp = async (req, res) => {
   try {
     const userDoc = await User.findOne({ email });
     if (userDoc) {
-      console.info('Sign up failed, user exists with this email');
       req.flash('error', 'Email already exists!');
       return res.redirect('/signup');
     }
@@ -65,8 +72,14 @@ postSignUp = async (req, res) => {
         name, email, password: hashedPassword, cart: { items: [] },
       });
       await user.save();
-      console.info('Sign up successful');
-      res.redirect('/login');
+    res.redirect('/login');
+    await transporter.sendMail({
+        to: email,
+        subject: 'Sign up',
+        from: process.env.SENDER,
+        html: '<h1>Sign up Successful!</h1>'
+      })
+
   } catch (e) {
     console.error(`Error during signup: ${e}`);
   }
@@ -82,4 +95,12 @@ postLogout = (req, res) => {
   }
 };
 
-module.exports = { getLogin, getSignUp, postLogin, postSignUp, postLogout };
+getResetPassword = async (req, res) => {
+  try {
+    res.json({ errorMessage: req.flash('error') });
+  } catch (e) {
+    console.error(`Error in getPwReset: ${e}`);
+  }
+}
+
+module.exports = { getLogin, getSignUp, postLogin, postSignUp, postLogout, getResetPassword };

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../css/Login.css';
 
-const Login = ({ csrfToken, setIsAuthenticated }) => {
+const ResetPw = ({ csrfToken }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,7 +27,6 @@ const Login = ({ csrfToken, setIsAuthenticated }) => {
       if (data.errorMessage?.length > 0) {
         setError(data.errorMessage);
       } else {
-        setIsAuthenticated(data.isAuthenticated);
         navigate('/');
       }
     } catch (err) {
@@ -37,22 +36,17 @@ const Login = ({ csrfToken, setIsAuthenticated }) => {
 
   return (
     <main className="login-page">
-      <h2>Login</h2>
+      <h2>Reset Your Password</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit} className="login-form">
         <div>
           <label htmlFor="email">Email</label>
           <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} required autoComplete="off" />
         </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} required />
-        </div>
-        <button type="submit">Login</button>
-        <NavLink to={'/reset'} className="reset-link">Reset Password</NavLink>
+        <button type="submit">Reset Password</button>
       </form>
     </main>
   );
 };
 
-export default Login;
+export default ResetPw;

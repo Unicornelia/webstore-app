@@ -59,3 +59,22 @@ button:hover {
     color: red;
     font-size: 14px;
 }
+
+.reset-link {
+    color: #1aa892;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.reset-link:hover {
+    color: #10808a;
+    transform: translateY(-2px);
+}
+
+.reset-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #1aa892;
+}
