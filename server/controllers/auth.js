@@ -12,7 +12,7 @@ getLogin = (req, res) => {
 
 getSignUp = (req, res) => {
   try {
-    res.json({ isAuthenticated: req.session.isAuthenticated });
+    res.json({ isAuthenticated: req.session.isAuthenticated,  errorMessage: req.flash('error') });
   } catch (e) {
     console.error(`Error in getSignUp: ${e}`);
   }
@@ -55,20 +55,18 @@ postSignUp = async (req, res) => {
 
   try {
     const userDoc = await User.findOne({ email });
-
     if (userDoc) {
-      console.info('User already exists!');
+      console.info('Sign up failed, user exists with this email');
+      req.flash('error', 'Email already exists!');
       return res.redirect('/signup');
-    } else {
+    }
       const hashedPassword = await bcrypt.hash(password, 12);
       const user = new User({
         name, email, password: hashedPassword, cart: { items: [] },
       });
-
       await user.save();
       console.info('Sign up successful');
       res.redirect('/login');
-    }
   } catch (e) {
     console.error(`Error during signup: ${e}`);
   }

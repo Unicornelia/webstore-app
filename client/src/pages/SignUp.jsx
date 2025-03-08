@@ -27,8 +27,13 @@ const SignUp = ({ csrfToken }) => {
         body: JSON.stringify(formData),
       });
       if (!response.ok) throw new Error('Signup failed!');
-      alert('Successful signup!');
-      navigate('/login'); // Redirect to /login after successful signup
+      const data = await response.json();
+      if (data.errorMessage?.length > 0) {
+        setError(data.errorMessage);
+      } else {
+        alert('Successful signup!');
+        navigate('/');
+      }
     } catch (err) {
       setError(err.message);
     }

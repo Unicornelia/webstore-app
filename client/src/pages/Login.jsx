@@ -24,7 +24,7 @@ const Login = ({ csrfToken, setIsAuthenticated }) => {
       });
       if (!response.ok) throw new Error('Invalid credentials');
       const data = await response.json();
-      if (data.errorMessage) {
+      if (data.errorMessage?.length > 0) {
         setError(data.errorMessage);
       } else {
         setIsAuthenticated(data.isAuthenticated);
