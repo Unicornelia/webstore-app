@@ -43,7 +43,7 @@ const Products = ({csrfToken}) => {
           ))}
         </div>
       ) : (
-        <h1>No Products Found!</h1>
+        <h1>Loading...</h1>
       )}
     </main>
   );

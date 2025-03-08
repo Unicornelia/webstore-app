@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 
 getLogin = (req, res) => {
   try {
-    res.json({ isAuthenticated: req.session.isAuthenticated });
+    res.json({ isAuthenticated: req.session.isAuthenticated, errorMessage: req.flash('error') });
   } catch (e) {
     console.error(`Error in getLogin: ${e}`);
   }
@@ -24,6 +24,7 @@ postLogin = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
+      req.flash('error', 'Invalid email or password');
       return res.redirect('/login');
     }
     bcrypt.compare(password, user.password, (e, isMatch) => {

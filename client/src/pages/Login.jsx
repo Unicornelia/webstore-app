@@ -23,8 +23,13 @@ const Login = ({ csrfToken, setIsAuthenticated }) => {
         body: JSON.stringify(formData),
       });
       if (!response.ok) throw new Error('Invalid credentials');
-      setIsAuthenticated(true);
-      navigate('/'); // Redirect to homepage
+      const data = await response.json();
+      if (data.errorMessage) {
+        setError(data.errorMessage);
+      } else {
+        setIsAuthenticated(data.isAuthenticated);
+        navigate('/');
+      }
     } catch (err) {
       setError(err.message);
     }
