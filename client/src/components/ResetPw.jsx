@@ -13,10 +13,9 @@ const ResetPw = ({ csrfToken }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/login', {
+      const response = await fetch('http://localhost:3001/reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
         credentials: 'include',
@@ -24,9 +23,11 @@ const ResetPw = ({ csrfToken }) => {
       });
       if (!response.ok) throw new Error('Invalid credentials');
       const data = await response.json();
+      console.log(data, 'data in resetpw');
       if (data.errorMessage?.length > 0) {
         setError(data.errorMessage);
       } else {
+        alert(`Got it! We sent an email to ${data.email}. Check your email and reset your password`);
         navigate('/');
       }
     } catch (err) {

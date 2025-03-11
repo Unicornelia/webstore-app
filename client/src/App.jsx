@@ -11,7 +11,7 @@ import ProductDetail from './components/ProductDetail';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import ResetPw from './pages/ResetPw';
+import ResetPw from './components/ResetPw';
 
 const App = () => {
   const [csrfToken, setCsrfToken] = useState('');

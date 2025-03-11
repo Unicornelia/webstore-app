@@ -1,4 +1,5 @@
 require('dotenv').config();
+const crypto = require('crypto');
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
@@ -7,7 +8,7 @@ const sendGridTransport = require('nodemailer-sendgrid-transport');
 const transporter = nodemailer.createTransport(sendGridTransport({
   auth: {
     api_key: process.env.SENDGRID_KEY,
-  }
+  },
 }));
 
 getLogin = (req, res) => {
@@ -20,7 +21,7 @@ getLogin = (req, res) => {
 
 getSignUp = (req, res) => {
   try {
-    res.json({ isAuthenticated: req.session.isAuthenticated,  errorMessage: req.flash('error') });
+    res.json({ isAuthenticated: req.session.isAuthenticated, errorMessage: req.flash('error') });
   } catch (e) {
     console.error(`Error in getSignUp: ${e}`);
   }
@@ -67,18 +68,18 @@ postSignUp = async (req, res) => {
       req.flash('error', 'Email already exists!');
       return res.redirect('/signup');
     }
-      const hashedPassword = await bcrypt.hash(password, 12);
-      const user = new User({
-        name, email, password: hashedPassword, cart: { items: [] },
-      });
-      await user.save();
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = new User({
+      name, email, password: hashedPassword, cart: { items: [] },
+    });
+    await user.save();
     res.redirect('/login');
     await transporter.sendMail({
-        to: email,
-        subject: 'Sign up',
-        from: process.env.SENDER,
-        html: '<h1>Sign up Successful!</h1>'
-      })
+      to: email,
+      subject: 'Sign up',
+      from: process.env.SENDER,
+      html: '<h1>Sign up Successful!</h1>',
+    });
 
   } catch (e) {
     console.error(`Error during signup: ${e}`);
@@ -99,8 +100,43 @@ getResetPassword = async (req, res) => {
   try {
     res.json({ errorMessage: req.flash('error') });
   } catch (e) {
-    console.error(`Error in getPwReset: ${e}`);
+    console.error(`Error: ${e} in resetting password.`);
   }
-}
+};
 
-module.exports = { getLogin, getSignUp, postLogin, postSignUp, postLogout, getResetPassword };
+postResetPassword = async (req, res) => {
+  crypto.randomBytes(32, async (e, buffer) => {
+    if (e) {
+      console.error(`Error: ${e} in postResetPassword`);
+      return res.redirect('/reset');
+    }
+    const token = buffer.toString('hex');
+    const user = await User.findOne({ email: req.body.email });
+    try {
+      if (!user) {
+        req.flash('error', 'No account with that email found.');
+        res.json({ errorMessage: req.flash('error') });
+      } else {
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        const result = await user.save();
+        console.log(result);
+        res.json({ email: result.email });
+        await transporter.sendMail({
+          to: req.body.email,
+          from: process.env.SENDER,
+          subject: 'Password reset',
+          html: `
+            <p>You requested a password reset</p>
+            <p>Click <a href="http://localhost:3000/reset/${token}">here</a> to set a new password</p>
+            <p>This link is only valid for an hour!</p>
+          `,
+        });
+      }
+    } catch (e) {
+      console.error(`Error: ${e}`);
+    }
+  });
+};
+
+module.exports = { getLogin, getSignUp, postLogin, postSignUp, postLogout, getResetPassword, postResetPassword };

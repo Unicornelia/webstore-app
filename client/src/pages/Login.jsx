@@ -49,7 +49,7 @@ const Login = ({ csrfToken, setIsAuthenticated }) => {
           <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} required />
         </div>
         <button type="submit">Login</button>
-        <NavLink to={'/reset'} className="reset-link">Reset Password</NavLink>
+        <NavLink to={'/reset'} className="reset-link">Forgot Password?</NavLink>
       </form>
     </main>
   );
