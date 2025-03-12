@@ -12,6 +12,7 @@ import Orders from './pages/Orders';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ResetPw from './components/ResetPw';
+import NewPassword from './pages/NewPassword';
 
 const App = () => {
   const [csrfToken, setCsrfToken] = useState('');
@@ -59,6 +60,7 @@ const App = () => {
           <Route path="/login" element={<Login csrfToken={csrfToken} setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/signup" element={<SignUp csrfToken={csrfToken} />} />
           <Route path="/reset" element={<ResetPw csrfToken={csrfToken} />} />
+          <Route path="/reset/:token" element={<NewPassword csrfToken={csrfToken} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

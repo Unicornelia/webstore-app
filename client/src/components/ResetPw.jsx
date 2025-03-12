@@ -13,6 +13,7 @@ const ResetPw = ({ csrfToken }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     try {
       const response = await fetch('http://localhost:3001/reset', {
@@ -23,7 +24,6 @@ const ResetPw = ({ csrfToken }) => {
       });
       if (!response.ok) throw new Error('Invalid credentials');
       const data = await response.json();
-      console.log(data, 'data in resetpw');
       if (data.errorMessage?.length > 0) {
         setError(data.errorMessage);
       } else {

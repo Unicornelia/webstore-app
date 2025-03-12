@@ -44,6 +44,8 @@ postLogin = async (req, res) => {
           console.error(`Error: ${e}`);
           res.redirect('/');
         });
+      } else {
+        req.flash('error', 'Invalid password!');
       }
       res.redirect('/login');
       if (e) {
@@ -139,4 +141,40 @@ postResetPassword = async (req, res) => {
   });
 };
 
-module.exports = { getLogin, getSignUp, postLogin, postSignUp, postLogout, getResetPassword, postResetPassword };
+getNewPassword = async (req, res) => {
+  const token = req.params.token;
+  try {
+    const user = await User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } });
+    if (!user) {
+    }
+    res.json({ errorMessage: req.flash('error'), userId: user._id.toString(), passwordToken: token });
+  } catch (e) {
+    console.error(`Error: ${e} in updating password.`);
+  }
+};
+
+postNewPassword = async (req, res) => {
+  const newPassword = req.body.password;
+  const userId = req.body.userId;
+  const token = req.body.passwordToken;
+  try {
+    const user = await User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() }, _id: userId });
+    user.password = await bcrypt.hash(newPassword, 12);
+    const result = await user.save();
+    res.json({});
+    await transporter.sendMail({
+      to: user.email,
+      from: process.env.SENDER,
+      subject: 'Password updated',
+      html: `
+            <p>You have successfully updated your password!</p>
+            <p>Click <a href="http://localhost:3000/login">here</a> to login.</p>
+          `,
+    });
+  } catch (e) {
+    console.error(`Error: ${e} in saving new password.`);
+  }
+};
+
+
+module.exports = { getLogin, getSignUp, postLogin, postSignUp, postLogout, getResetPassword, postResetPassword, getNewPassword, postNewPassword };
