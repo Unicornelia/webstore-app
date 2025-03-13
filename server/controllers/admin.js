@@ -10,7 +10,7 @@ getAddProduct = (req, res) => {
 
 getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({ userId: req.user._id });
     res.status(200).json({ products, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in fetching all products: ${e}`);
@@ -63,15 +63,18 @@ postEditProduct = async (req, res) => {
     } = req.body;
 
     const product = await Product.findById(id);
+    if (product.userId.toString() !== req.user._id.toString()) {
+      return res.redirect('/');
+    } else {
+      product.title = title;
+      product.imageUrl = imageUrl;
+      product.price = price;
+      product.description = description;
 
-    product.title = title;
-    product.imageUrl = imageUrl;
-    product.price = price;
-    product.description = description;
-
-    const result = await product.save();
-    res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });
-    console.info(`Updated product: ${result}`);
+      const result = await product.save();
+      res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });
+      console.info(`Updated product: ${result}`);
+    }
   } catch (e) {
     console.error(`Error in updating product: ${e}`);
   }
@@ -80,7 +83,7 @@ postEditProduct = async (req, res) => {
 deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    await Product.findByIdAndDelete(id);
+    await Product.deleteOne({ _id: req.body.productId, userId: req.user._id });
     console.log(`Product ${id} has been deleted`);
     res.status(201).json({ message: 'Product deleted successfully' });
   } catch (e) {
