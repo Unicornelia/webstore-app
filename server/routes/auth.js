@@ -10,12 +10,13 @@ const {
   getNewPassword,
   postNewPassword,
 } = require('../controllers/auth');
+const { check } = require('express-validator');
 const router = express.Router();
 
 router.get('/login', getLogin);
 router.get('/signup', getSignUp);
 router.post('/login', postLogin);
-router.post('/signup', postSignUp);
+router.post('/signup', check('email').isEmail(), postSignUp);
 router.post('/logout', postLogout);
 router.get('/reset', getResetPassword);
 router.post('/reset', postResetPassword);

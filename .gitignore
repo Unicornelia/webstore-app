@@ -2,7 +2,6 @@
 /shelf/
 /.idea/workspace.xml
 node_modules
-server/package-lock.json
 # Editor-based HTTP Client requests
 /httpRequests/
 # Datasource local storage ignored files
