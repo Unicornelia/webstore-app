@@ -1,11 +1,38 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
 # Default ignored files
 /shelf/
-/.idea/workspace.xml
-node_modules
+/.idea
+
 # Editor-based HTTP Client requests
 /httpRequests/
+
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/.idea
-.env
+server/.env
+client/.env
+./env
+
+# dependencies
+client/node_modules
+server/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+client/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

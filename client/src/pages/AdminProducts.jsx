@@ -13,24 +13,41 @@ const AdminProducts = ({ csrfToken }) => {
   }, []);
 
   const handleDelete = async (productId) => {
-    if (!window.confirm(`Are you sure you want to delete this product? ${productId}`)) return;
+    if (
+      !window.confirm(
+        `Are you sure you want to delete this product? ${productId}`
+      )
+    )
+      return;
 
     try {
-      const response = await fetch(`http://localhost:3001/admin/delete-product/${productId}`, {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
-      });
+      const response = await fetch(
+        `http://localhost:3001/admin/delete-product/${productId}`,
+        {
+          method: 'DELETE',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'CSRF-TOKEN': csrfToken,
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error('Failed to delete product');
       }
 
       // Fetch updated products list
-      const updatedProducts = await fetch('http://localhost:3001/admin/products', {
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
-      });
+      const updatedProducts = await fetch(
+        'http://localhost:3001/admin/products',
+        {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'CSRF-TOKEN': csrfToken,
+          },
+        }
+      );
       const productsData = await updatedProducts.json();
       setProducts(productsData); // Update state with new product list
     } catch (err) {
@@ -58,7 +75,11 @@ const AdminProducts = ({ csrfToken }) => {
                 <Link to={`/admin/edit-product/${product._id}`} className="btn">
                   Edit
                 </Link>
-                <button className="btn danger" onClick={() => handleDelete(product._id)}>
+                <button
+                  type="button"
+                  className="btn danger"
+                  onClick={() => handleDelete(product._id)}
+                >
                   Delete
                 </button>
               </div>

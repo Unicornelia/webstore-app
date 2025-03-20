@@ -22,7 +22,10 @@ const SignUp = ({ csrfToken }) => {
     try {
       const response = await fetch('http://localhost:3001/signup', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-TOKEN': csrfToken,
+        },
         credentials: 'include',
         body: JSON.stringify(formData),
       });
@@ -43,7 +46,7 @@ const SignUp = ({ csrfToken }) => {
     <main className="signup-container">
       <h2>Create an Account</h2>
       {error && <p className="error">{error}</p>}
-      <form className="signup-form" onSubmit={handleSubmit}>
+      <form className="signup-form" onSubmit={handleSubmit} noValidate>
         <div className="form-control">
           <label htmlFor="name">Name</label>
           <input
@@ -93,7 +96,9 @@ const SignUp = ({ csrfToken }) => {
             required
           />
         </div>
-        <button type="submit" className="btn">Sign Up</button>
+        <button type="submit" className="btn">
+          Sign Up
+        </button>
       </form>
     </main>
   );

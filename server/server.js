@@ -24,7 +24,9 @@ const store = new MongoDBStore({
   collection: 'sessions',
 });
 // Catch store related errors
-store.on('error', (error) => console.error(chalk.redBright(`Error in store: ${error}`)));
+store.on('error', (error) =>
+  console.error(chalk.redBright(`Error in store: ${error}`))
+);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -36,7 +38,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store,
-  }),
+  })
 );
 
 const csrfProtection = csrf({ cookie: true });
@@ -47,7 +49,7 @@ app.use(
     origin: 'http://localhost:3000',
     credentials: true,
     allowedHeaders: ['Content-Type', 'CSRF-TOKEN'],
-  }),
+  })
 );
 
 app.use(csrfProtection);
@@ -88,13 +90,17 @@ const clientBuildPath = path.resolve(__dirname, '../client/build');
 app.use(express.static(clientBuildPath));
 // Catch-all to serve React app for unknown routes
 app.get('*', (req, res) =>
-  res.sendFile(path.join(clientBuildPath, 'index.html')),
+  res.sendFile(path.join(clientBuildPath, 'index.html'))
 );
 
 // ✅ Connect to Database and Start Server
 mongooseConnect(() => {
   console.info(chalk.blueBright(`🔋 Connected to Mongoose 🔋`));
   app.listen(PORT, () => {
-    console.info(chalk.cyanBright(`📡 Server running on http://localhost:${PORT} 📡`));
+    console.info(
+      chalk.cyanBright(`📡 Server running on http://localhost:${PORT} 📡`)
+    );
   });
-}).catch(e => console.error(chalk.redBright(`Error in connecting to the server: ${e}`)));
+}).catch((e) =>
+  console.error(chalk.redBright(`Error in connecting to the server: ${e}`))
+);

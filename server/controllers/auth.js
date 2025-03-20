@@ -6,15 +6,20 @@ const nodemailer = require('nodemailer');
 const sendGridTransport = require('nodemailer-sendgrid-transport');
 const { validationResult } = require('express-validator');
 
-const transporter = nodemailer.createTransport(sendGridTransport({
-  auth: {
-    api_key: process.env.SENDGRID_KEY,
-  },
-}));
+const transporter = nodemailer.createTransport(
+  sendGridTransport({
+    auth: {
+      api_key: process.env.SENDGRID_KEY,
+    },
+  })
+);
 
 getLogin = (req, res) => {
   try {
-    res.json({ isAuthenticated: req.session.isAuthenticated, errorMessage: req.flash('error') });
+    res.json({
+      isAuthenticated: req.session.isAuthenticated,
+      errorMessage: req.flash('error'),
+    });
   } catch (e) {
     console.error(`Error in getLogin: ${e}`);
   }
@@ -22,7 +27,10 @@ getLogin = (req, res) => {
 
 getSignUp = (req, res) => {
   try {
-    res.json({ isAuthenticated: req.session.isAuthenticated, errorMessage: req.flash('error') });
+    res.json({
+      isAuthenticated: req.session.isAuthenticated,
+      errorMessage: req.flash('error'),
+    });
   } catch (e) {
     console.error(`Error in getSignUp: ${e}`);
   }
@@ -77,7 +85,10 @@ postSignUp = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({
-      name, email, password: hashedPassword, cart: { items: [] },
+      name,
+      email,
+      password: hashedPassword,
+      cart: { items: [] },
     });
     await user.save();
     res.redirect('/login');
@@ -87,7 +98,6 @@ postSignUp = async (req, res) => {
       from: process.env.SENDER,
       html: '<h1>Sign up Successful!</h1>',
     });
-
   } catch (e) {
     console.error(`Error during signup: ${e}`);
   }
@@ -149,10 +159,17 @@ postResetPassword = async (req, res) => {
 getNewPassword = async (req, res) => {
   const token = req.params.token;
   try {
-    const user = await User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } });
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiration: { $gt: Date.now() },
+    });
     if (!user) {
     }
-    res.json({ errorMessage: req.flash('error'), userId: user._id.toString(), passwordToken: token });
+    res.json({
+      errorMessage: req.flash('error'),
+      userId: user._id.toString(),
+      passwordToken: token,
+    });
   } catch (e) {
     console.error(`Error: ${e} in updating password.`);
   }
@@ -163,7 +180,11 @@ postNewPassword = async (req, res) => {
   const userId = req.body.userId;
   const token = req.body.passwordToken;
   try {
-    const user = await User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() }, _id: userId });
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiration: { $gt: Date.now() },
+      _id: userId,
+    });
     user.password = await bcrypt.hash(newPassword, 12);
     const result = await user.save();
     res.json({});
@@ -181,5 +202,14 @@ postNewPassword = async (req, res) => {
   }
 };
 
-
-module.exports = { getLogin, getSignUp, postLogin, postSignUp, postLogout, getResetPassword, postResetPassword, getNewPassword, postNewPassword };
+module.exports = {
+  getLogin,
+  getSignUp,
+  postLogin,
+  postSignUp,
+  postLogout,
+  getResetPassword,
+  postResetPassword,
+  getNewPassword,
+  postNewPassword,
+};
