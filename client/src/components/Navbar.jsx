@@ -10,7 +10,10 @@ const Navbar = ({ csrfToken, isAuthenticated, setIsAuthenticated }) => {
     try {
       const response = await fetch('http://localhost:3001/logout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-TOKEN': csrfToken,
+        },
         credentials: 'include',
       });
       if (!response.ok) throw new Error('Invalid credentials');
@@ -29,6 +32,7 @@ const Navbar = ({ csrfToken, isAuthenticated, setIsAuthenticated }) => {
   const privateLinks = [
     { to: '/cart', label: 'Cart' },
     { to: '/orders', label: 'Orders' },
+    { to: '/checkout', label: 'Checkout' },
     { to: '/admin/add-product', label: 'Add Product' },
     { to: '/admin/products', label: 'Admin Products' },
   ];
@@ -36,21 +40,27 @@ const Navbar = ({ csrfToken, isAuthenticated, setIsAuthenticated }) => {
   const authLinks = isAuthenticated
     ? [{ to: '/logout', label: 'Logout', isForm: true }]
     : [
-      { to: '/login', label: 'Login' },
-      { to: '/signup', label: 'Sign Up' },
-    ];
+        { to: '/login', label: 'Login' },
+        { to: '/signup', label: 'Sign Up' },
+      ];
 
   return (
     <header className="main-header">
       <nav className="main-header__nav">
         <ul className="main-header__item-list">
-          {[...publicLinks, ...(isAuthenticated ? privateLinks : [])].map(({ to, label, exact }) => (
-            <li key={to} className="main-header__item">
-              <NavLink to={to} end={exact} className={({ isActive }) => (isActive ? 'active' : '')}>
-                {label}
-              </NavLink>
-            </li>
-          ))}
+          {[...publicLinks, ...(isAuthenticated ? privateLinks : [])].map(
+            ({ to, label, exact }) => (
+              <li key={to} className="main-header__item">
+                <NavLink
+                  to={to}
+                  end={exact}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                >
+                  {label}
+                </NavLink>
+              </li>
+            )
+          )}
         </ul>
 
         <ul className="main-header__item-list">
@@ -64,11 +74,14 @@ const Navbar = ({ csrfToken, isAuthenticated, setIsAuthenticated }) => {
               </li>
             ) : (
               <li key={to} className="main-header__item">
-                <NavLink to={to} className={({ isActive }) => (isActive ? 'active' : '')}>
+                <NavLink
+                  to={to}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                >
                   {label}
                 </NavLink>
               </li>
-            ),
+            )
           )}
         </ul>
       </nav>

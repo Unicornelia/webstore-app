@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Products from './pages/Products';
@@ -13,6 +18,17 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ResetPw from './components/ResetPw';
 import NewPassword from './pages/NewPassword';
+import Checkout from './pages/Checkout';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePublicKey = process.env.REACT_APP_PUBLISHABLE_STRIPE_KEY;
+if (!stripePublicKey) {
+  console.error('Missing Stripe public key!');
+}
+const stripePromise = await loadStripe(stripePublicKey);
+
+console.log(stripePromise);
 
 const App = () => {
   const [csrfToken, setCsrfToken] = useState('');
@@ -40,31 +56,109 @@ const App = () => {
       .catch((e) => console.error(`Fetch error in getting csrf-token: ${e}`));
   }, []);
 
+  if (!stripePromise) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <Router>
-      <Navbar
-        csrfToken={csrfToken}
-        isAuthenticated={isAuthenticated}
-        setIsAuthenticated={setIsAuthenticated} />
-      <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products csrfToken={csrfToken} />} />
-          <Route path="/products/:productId" element={<ProductDetail csrfToken={csrfToken} />} />
-          <Route path="/cart" element={isAuthenticated ? <Cart csrfToken={csrfToken} /> : <Navigate to="/" replace />} />
-          <Route path="/orders" element={isAuthenticated ? <Orders csrfToken={csrfToken} /> : <Navigate to="/" replace />} />
-          <Route path="/admin/add-product" element={isAuthenticated ? <AddOrEditProduct csrfToken={csrfToken} /> : <Navigate to="/" replace />} />
-          <Route path="/admin/edit-product/:productId"
-                 element={isAuthenticated ? <AddOrEditProduct csrfToken={csrfToken} /> : <Navigate to="/" replace />} />
-          <Route path="/admin/products" element={isAuthenticated ? <AdminProducts csrfToken={csrfToken} /> : <Navigate to="/" replace />} />
-          <Route path="/login" element={<Login csrfToken={csrfToken} setIsAuthenticated={setIsAuthenticated} />} />
-          <Route path="/signup" element={<SignUp csrfToken={csrfToken} />} />
-          <Route path="/reset" element={<ResetPw csrfToken={csrfToken} />} />
-          <Route path="/reset/:token" element={<NewPassword csrfToken={csrfToken} />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-    </Router>
+    <Elements stripe={stripePromise}>
+      <Router>
+        <Navbar
+          csrfToken={csrfToken}
+          isAuthenticated={isAuthenticated}
+          setIsAuthenticated={setIsAuthenticated}
+        />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/products"
+              element={<Products csrfToken={csrfToken} />}
+            />
+            <Route
+              path="/products/:productId"
+              element={<ProductDetail csrfToken={csrfToken} />}
+            />
+            <Route
+              path="/cart"
+              element={
+                isAuthenticated ? (
+                  <Cart csrfToken={csrfToken} />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                isAuthenticated ? (
+                  <Orders csrfToken={csrfToken} />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                isAuthenticated ? (
+                  <Checkout csrfToken={csrfToken} />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/admin/add-product"
+              element={
+                isAuthenticated ? (
+                  <AddOrEditProduct csrfToken={csrfToken} />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/admin/edit-product/:productId"
+              element={
+                isAuthenticated ? (
+                  <AddOrEditProduct csrfToken={csrfToken} />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/admin/products"
+              element={
+                isAuthenticated ? (
+                  <AdminProducts csrfToken={csrfToken} />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <Login
+                  csrfToken={csrfToken}
+                  setIsAuthenticated={setIsAuthenticated}
+                />
+              }
+            />
+            <Route path="/signup" element={<SignUp csrfToken={csrfToken} />} />
+            <Route path="/reset" element={<ResetPw csrfToken={csrfToken} />} />
+            <Route
+              path="/reset/:token"
+              element={<NewPassword csrfToken={csrfToken} />}
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+      </Router>
+    </Elements>
   );
 };
 
