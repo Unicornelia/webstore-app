@@ -1,4 +1,4 @@
-module.exports = (req, res, next) => {
+export const isAuth = (req, res, next) => {
   if (!req.session?.isAuthenticated) {
     return res.redirect(301, '/login');
   }

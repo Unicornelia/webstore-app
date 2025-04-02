@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { Schema } = require('mongoose');
+import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -17,14 +17,20 @@ const userSchema = new mongoose.Schema({
   resetToken: String,
   resetTokenExpiration: Date,
   cart: {
-    items: [{
-      product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
-      quantity: { type: Number, required: true },
-    }],
+    items: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true,
+        },
+        quantity: { type: Number, required: true },
+      },
+    ],
   },
 });
 
-userSchema.methods.addToCart = function(product) {
+userSchema.methods.addToCart = function (product) {
   const cartProductIndex = this.cart.items.findIndex((item) => {
     return item.product.toString() === product._id.toString();
   });
@@ -43,14 +49,16 @@ userSchema.methods.addToCart = function(product) {
   return this.save();
 };
 
-userSchema.methods.removeFromCart = function(productId) {
-  this.cart.items = this.cart.items.filter(item => item.product.toString() !== productId.toString());
+userSchema.methods.removeFromCart = function (productId) {
+  this.cart.items = this.cart.items.filter(
+    (item) => item.product.toString() !== productId.toString()
+  );
   return this.save();
 };
 
-userSchema.methods.clearCart = function(productId) {
+userSchema.methods.clearCart = function (productId) {
   this.cart = { items: [] };
   return this.save();
 };
 
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);

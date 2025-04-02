@@ -1,19 +1,19 @@
 require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
+import express from 'express';
+import bodyParser from 'body-parser';
+import path from 'path';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
 const MongoDBStore = require('connect-mongodb-session')(session);
-const csrf = require('csurf');
-const chalk = require('chalk');
-const flash = require('connect-flash');
-const mongooseConnect = require('./config/database');
-const User = require('./models/user');
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-const authRoutes = require('./routes/auth');
+import csrf from 'csurf';
+import chalk from 'chalk';
+import flash from 'connect-flash';
+import mongooseConnect from './src/config/database';
+import User from './src/models/user';
+import adminRoutes from './src/routes/admin';
+import shopRoutes from './src/routes/shop';
+import authRoutes from './src/routes/auth';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -24,7 +24,7 @@ const store = new MongoDBStore({
   collection: 'sessions',
 });
 // Catch store related errors
-store.on('error', (error) =>
+store.on('error', (error: Error) =>
   console.error(chalk.redBright(`Error in store: ${error}`))
 );
 
@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || '',
     cookie: { maxAge: 1000 * 60 * 60 * 24, sameSite: 'lax' },
     resave: false,
     saveUninitialized: false,

@@ -1,16 +1,17 @@
-const express = require('express');
-const {
+import { Router } from 'express';
+import { body } from 'express-validator';
+
+import {
   getProducts,
   postAddProduct,
   getEditProduct,
   postEditProduct,
   deleteProduct,
   getAddProduct,
-} = require('../controllers/admin');
-const isAuth = require('../middleware/is-auth');
-const { body } = require('express-validator');
+} from '../controllers/admin';
+import { isAuth } from '../middleware/is-auth';
 
-const router = express.Router();
+const router = Router();
 
 router.get('/products', isAuth, getProducts);
 router.get('/add-product', isAuth, getAddProduct);
@@ -37,4 +38,4 @@ router.post(
 );
 router.delete('/delete-product/:id', isAuth, deleteProduct);
 
-module.exports = router;
+export default router;

@@ -1,10 +1,10 @@
 require('dotenv').config();
-const crypto = require('crypto');
-const User = require('../models/user');
-const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
-const sendGridTransport = require('nodemailer-sendgrid-transport');
-const { validationResult } = require('express-validator');
+import crypto from 'crypto';
+import User from '../models/user';
+import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
+import sendGridTransport from 'nodemailer-sendgrid-transport';
+import { validationResult } from 'express-validator';
 
 const transporter = nodemailer.createTransport(
   sendGridTransport({
@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport(
   })
 );
 
-getLogin = (req, res) => {
+const getLogin = (req: Request, res: Response) => {
   try {
     res.json({
       isAuthenticated: req.session.isAuthenticated,
@@ -25,7 +25,7 @@ getLogin = (req, res) => {
   }
 };
 
-getSignUp = (req, res) => {
+const getSignUp = (req, res) => {
   try {
     res.json({
       isAuthenticated: req.session.isAuthenticated,
@@ -36,7 +36,7 @@ getSignUp = (req, res) => {
   }
 };
 
-postLogin = async (req, res) => {
+const postLogin = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   try {
@@ -67,7 +67,7 @@ postLogin = async (req, res) => {
   }
 };
 
-postSignUp = async (req, res) => {
+const postSignUp = async (req, res) => {
   const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
@@ -103,7 +103,7 @@ postSignUp = async (req, res) => {
   }
 };
 
-postLogout = (req, res) => {
+const postLogout = (req, res) => {
   try {
     req.session.destroy(() => {
       res.redirect('/');
@@ -113,7 +113,7 @@ postLogout = (req, res) => {
   }
 };
 
-getResetPassword = async (req, res) => {
+const getResetPassword = async (req, res) => {
   try {
     res.json({ errorMessage: req.flash('error') });
   } catch (e) {
@@ -121,7 +121,7 @@ getResetPassword = async (req, res) => {
   }
 };
 
-postResetPassword = async (req, res) => {
+const postResetPassword = async (req, res) => {
   crypto.randomBytes(32, async (e, buffer) => {
     if (e) {
       console.error(`Error: ${e} in postResetPassword`);
@@ -156,7 +156,7 @@ postResetPassword = async (req, res) => {
   });
 };
 
-getNewPassword = async (req, res) => {
+const getNewPassword = async (req, res) => {
   const token = req.params.token;
   try {
     const user = await User.findOne({
@@ -175,7 +175,7 @@ getNewPassword = async (req, res) => {
   }
 };
 
-postNewPassword = async (req, res) => {
+const postNewPassword = async (req, res) => {
   const newPassword = req.body.password;
   const userId = req.body.userId;
   const token = req.body.passwordToken;
@@ -202,7 +202,7 @@ postNewPassword = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getLogin,
   getSignUp,
   postLogin,

@@ -1,8 +1,6 @@
-const express = require('express');
+import { Router } from 'express';
 
-const router = express.Router();
-
-const {
+import {
   createPaymentIntent,
   getIndex,
   getProducts,
@@ -13,8 +11,10 @@ const {
   getOrders,
   getCheckoutSuccess,
   getCheckout,
-} = require('../controllers/shop');
-const isAuth = require('../middleware/is-auth');
+} from '../controllers/shop';
+import { isAuth } from '../middleware/is-auth';
+
+const router = Router();
 
 router.get('/', getIndex);
 router.get('/products', getProducts);
@@ -29,4 +29,4 @@ router.get('/orders', isAuth, getOrders);
 router.post('/create-payment-intent', isAuth, createPaymentIntent);
 // router.get('/orders/:id', isAuth, getInvoice);
 
-module.exports = router;
+export default router;

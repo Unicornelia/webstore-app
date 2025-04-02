@@ -1,23 +1,27 @@
-const Product = require('../models/product');
+import Product from '../models/product';
 
-getAddProduct = (req, res) => {
+const getAddProduct = (req, res) => {
   try {
-    res.status(200).json({ isAuthenticated: req.session.isAuthenticated, editing: false });
+    res
+      .status(200)
+      .json({ isAuthenticated: req.session.isAuthenticated, editing: false });
   } catch (e) {
     console.error(`Error in getAddProduct: ${e}`);
   }
 };
 
-getProducts = async (req, res) => {
+const getProducts = async (req, res) => {
   try {
     const products = await Product.find({ userId: req.user._id });
-    res.status(200).json({ products, isAuthenticated: req.session.isAuthenticated });
+    res
+      .status(200)
+      .json({ products, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in fetching all products: ${e}`);
   }
 };
 
-postAddProduct = async (req, res) => {
+const postAddProduct = async (req, res) => {
   try {
     const product = new Product({
       title: req.body.title,
@@ -27,14 +31,16 @@ postAddProduct = async (req, res) => {
       userId: req.user._id,
     });
     const result = await product.save();
-    res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });
+    res
+      .status(201)
+      .json({ result, isAuthenticated: req.session.isAuthenticated });
     console.info(`Added new product: ${result}`);
   } catch (e) {
     console.error(`Error in postAddProduct: ${e.message}`);
   }
 };
 
-getEditProduct = async (req, res) => {
+const getEditProduct = async (req, res) => {
   try {
     const editMode = req.query.editing;
     if (!editMode) {
@@ -46,41 +52,41 @@ getEditProduct = async (req, res) => {
     if (!product) {
       return res.redirect('/');
     }
-    res.status(200).json({ product, isAuthenticated: req.session.isAuthenticated });
+    res
+      .status(200)
+      .json({ product, isAuthenticated: req.session.isAuthenticated });
   } catch (e) {
     console.error(`Error in getEditProduct: ${e}`);
   }
 };
 
-postEditProduct = async (req, res) => {
+const postEditProduct = async (req, res) => {
   try {
-    const {
-      id,
-      title,
-      imageUrl,
-      price,
-      description,
-    } = req.body;
+    const { id, title, imageUrl, price, description } = req.body;
 
     const product = await Product.findById(id);
-    if (product.userId.toString() !== req.user._id.toString()) {
-      return res.redirect('/');
-    } else {
-      product.title = title;
-      product.imageUrl = imageUrl;
-      product.price = price;
-      product.description = description;
+    if (product) {
+      if (product.userId.toString() !== req.user._id.toString()) {
+        return res.redirect('/');
+      } else {
+        product.title = title;
+        product.imageUrl = imageUrl;
+        product.price = price;
+        product.description = description;
 
-      const result = await product.save();
-      res.status(201).json({ result, isAuthenticated: req.session.isAuthenticated });
-      console.info(`Updated product: ${result}`);
+        const result = await product.save();
+        res
+          .status(201)
+          .json({ result, isAuthenticated: req.session.isAuthenticated });
+        console.info(`Updated product: ${result}`);
+      }
     }
   } catch (e) {
     console.error(`Error in updating product: ${e}`);
   }
 };
 
-deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
     await Product.deleteOne({ _id: req.body.productId, userId: req.user._id });
@@ -92,4 +98,11 @@ deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = { getAddProduct, getProducts, postAddProduct, getEditProduct, postEditProduct, deleteProduct };
+export {
+  getAddProduct,
+  getProducts,
+  postAddProduct,
+  getEditProduct,
+  postEditProduct,
+  deleteProduct,
+};

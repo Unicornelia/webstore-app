@@ -1,9 +1,11 @@
-const Product = require('../models/product');
-const Order = require('../models/order');
-const Stripe = require('stripe');
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+import Product from '../models/product';
+import Order from '../models/order';
+import Stripe from 'stripe';
 
-getIndex = async (req, res) => {
+const stripeSecret = process.env.STRIPE_SECRET_KEY || '';
+const stripe = new Stripe(stripeSecret);
+
+const getIndex = async (req: Request, res: Response) => {
   try {
     const products = await Product.find();
     res
@@ -15,7 +17,7 @@ getIndex = async (req, res) => {
   }
 };
 
-getProducts = async (req, res) => {
+const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
     res
@@ -27,7 +29,7 @@ getProducts = async (req, res) => {
   }
 };
 
-getProductDetail = async (req, res) => {
+const getProductDetail = async (req, res) => {
   try {
     const { productId } = req.params;
     const product = await Product.findById(productId);
@@ -39,7 +41,7 @@ getProductDetail = async (req, res) => {
   }
 };
 
-getCart = async (req, res) => {
+const getCart = async (req, res) => {
   try {
     const { cart } = await req.user.populate('cart.items.product');
     const cartItems = cart.items;
@@ -51,7 +53,7 @@ getCart = async (req, res) => {
   }
 };
 
-postCart = async (req, res) => {
+const postCart = async (req, res) => {
   try {
     const { productId } = req.body;
     const product = await Product.findById(productId);
@@ -65,7 +67,7 @@ postCart = async (req, res) => {
   }
 };
 
-postCartDeleteItem = async (req, res) => {
+const postCartDeleteItem = async (req, res) => {
   try {
     const { productId } = req.body;
     const result = await req.user.removeFromCart(productId);
@@ -77,7 +79,7 @@ postCartDeleteItem = async (req, res) => {
   }
 };
 
-getCheckout = async (req, res) => {
+const getCheckout = async (req, res) => {
   try {
     const { cart } = await req.user.populate('cart.items.product');
     const checkoutItems = cart.items;
@@ -114,7 +116,7 @@ getCheckout = async (req, res) => {
   }
 };
 
-createPaymentIntent = async (req, res) => {
+const createPaymentIntent = async (req, res) => {
   try {
     const { amount } = req.body;
     const paymentIntent = await stripe.paymentIntents.create({
@@ -128,7 +130,7 @@ createPaymentIntent = async (req, res) => {
   }
 };
 
-getCheckoutSuccess = async (req, res) => {
+const getCheckoutSuccess = async (req, res) => {
   try {
     const { cart } = await req.user.populate('cart.items.product');
     const products = cart.items.map((item) => {
@@ -154,7 +156,7 @@ getCheckoutSuccess = async (req, res) => {
   }
 };
 
-getOrders = async (req, res) => {
+const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ 'user.userId': req.user._id });
     res
@@ -165,7 +167,7 @@ getOrders = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   createPaymentIntent,
   getIndex,
   getProducts,
