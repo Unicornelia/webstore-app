@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require('dotenv').config();
+const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_session_1 = __importDefault(require("express-session"));
-const MongoDBStore = require('connect-mongodb-session')(express_session_1.default);
+const connect_mongodb_session_1 = __importDefault(require("connect-mongodb-session"));
 const csurf_1 = __importDefault(require("csurf"));
 const chalk_1 = __importDefault(require("chalk"));
 const connect_flash_1 = __importDefault(require("connect-flash"));
@@ -19,11 +19,15 @@ const user_1 = __importDefault(require("./src/models/user"));
 const admin_1 = __importDefault(require("./src/routes/admin"));
 const shop_1 = __importDefault(require("./src/routes/shop"));
 const auth_1 = __importDefault(require("./src/routes/auth"));
+const settings_1 = require("./settings");
+// Configure environment variables
+dotenv_1.default.config();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 3001;
-//Initialize store on MongoDB
+const PORT = settings_1.Settings.PORT;
+// Initialize MongoDB store for sessions
+const MongoDBStore = (0, connect_mongodb_session_1.default)(express_session_1.default);
 const store = new MongoDBStore({
-    uri: process.env.MONGODB_URI,
+    uri: process.env.MONGODB_URI || '',
     collection: 'sessions',
 });
 // Catch store related errors
@@ -63,7 +67,7 @@ app.use((req, res, next) => {
     }
 });
 app.get('/csrf-token', (req, res) => {
-    res.json({ csrfToken: req.csrfToken() });
+    res.json({ csrfToken: req.csrfToken ? req.csrfToken() : null });
 });
 app.use((req, res, next) => {
     //get it on all pages - every rendered view

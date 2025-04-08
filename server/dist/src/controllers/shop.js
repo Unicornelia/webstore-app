@@ -28,6 +28,12 @@ const getProducts = async (req, res) => {
         res
             .status(200)
             .json({ products, isAuthenticated: req.session.isAuthenticated });
+        for (let item of products) {
+            console.log(item);
+        }
+        for (let itemPos in products) {
+            console.log(itemPos);
+        }
     }
     catch (e) {
         console.error(`Error in getProducts: ${e}`);
@@ -134,7 +140,7 @@ const createPaymentIntent = async (req, res) => {
     }
     catch (e) {
         console.error(`Error in createPaymentIntent: ${e}`);
-        res.status(500).send({ error: e.message });
+        res.status(500).send({ error: e instanceof Error ? e.message : e });
     }
 };
 exports.createPaymentIntent = createPaymentIntent;

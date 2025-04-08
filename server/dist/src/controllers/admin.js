@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.postEditProduct = exports.getEditProduct = exports.postAddProduct = exports.getProducts = exports.getAddProduct = void 0;
 const product_1 = __importDefault(require("../models/product"));
-const getAddProduct = (req, res) => {
+const getAddProduct = async (req, res) => {
     try {
         res
             .status(200)
@@ -44,7 +44,7 @@ const postAddProduct = async (req, res) => {
         console.info(`Added new product: ${result}`);
     }
     catch (e) {
-        console.error(`Error in postAddProduct: ${e.message}`);
+        console.error(`Error in postAddProduct: ${e instanceof Error ? e.message : e}`);
     }
 };
 exports.postAddProduct = postAddProduct;

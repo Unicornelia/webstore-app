@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { Types } from 'mongoose';
 
-const orderSchema = new mongoose.Schema({
+const orderSchema: any = new mongoose.Schema({
   products: [
     {
       product: { type: Object, required: true },

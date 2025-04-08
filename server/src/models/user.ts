@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
+import { CartItem } from '../../types';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -30,8 +31,12 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.methods.addToCart = function (product) {
-  const cartProductIndex = this.cart.items.findIndex((item) => {
+type Product = {
+  _id: { toString: () => any };
+};
+
+userSchema.methods.addToCart = function (product: Product) {
+  const cartProductIndex = this.cart.items.findIndex((item: CartItem) => {
     return item.product.toString() === product._id.toString();
   });
   let newQuantity = 1;
@@ -49,14 +54,14 @@ userSchema.methods.addToCart = function (product) {
   return this.save();
 };
 
-userSchema.methods.removeFromCart = function (productId) {
+userSchema.methods.removeFromCart = function (productId: string) {
   this.cart.items = this.cart.items.filter(
-    (item) => item.product.toString() !== productId.toString()
+    (item: CartItem) => item.product.toString() !== productId.toString()
   );
   return this.save();
 };
 
-userSchema.methods.clearCart = function (productId) {
+userSchema.methods.clearCart = function (productId: string) {
   this.cart = { items: [] };
   return this.save();
 };

@@ -1,6 +1,7 @@
 import Product from '../models/product';
+import { Request, Response } from 'express';
 
-const getAddProduct = (req, res) => {
+const getAddProduct = async (req: Request, res: Response): Promise<void> => {
   try {
     res
       .status(200)
@@ -10,7 +11,7 @@ const getAddProduct = (req, res) => {
   }
 };
 
-const getProducts = async (req, res) => {
+const getProducts = async (req: Request, res: Response): Promise<void> => {
   try {
     const products = await Product.find({ userId: req.user._id });
     res
@@ -21,7 +22,7 @@ const getProducts = async (req, res) => {
   }
 };
 
-const postAddProduct = async (req, res) => {
+const postAddProduct = async (req: Request, res: Response): Promise<void> => {
   try {
     const product = new Product({
       title: req.body.title,
@@ -35,12 +36,14 @@ const postAddProduct = async (req, res) => {
       .status(201)
       .json({ result, isAuthenticated: req.session.isAuthenticated });
     console.info(`Added new product: ${result}`);
-  } catch (e) {
-    console.error(`Error in postAddProduct: ${e.message}`);
+  } catch (e: unknown) {
+    console.error(
+      `Error in postAddProduct: ${e instanceof Error ? e.message : e}`
+    );
   }
 };
 
-const getEditProduct = async (req, res) => {
+const getEditProduct = async (req: Request, res: Response): Promise<void> => {
   try {
     const editMode = req.query.editing;
     if (!editMode) {
@@ -60,7 +63,7 @@ const getEditProduct = async (req, res) => {
   }
 };
 
-const postEditProduct = async (req, res) => {
+const postEditProduct = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id, title, imageUrl, price, description } = req.body;
 
@@ -86,7 +89,7 @@ const postEditProduct = async (req, res) => {
   }
 };
 
-const deleteProduct = async (req, res) => {
+const deleteProduct = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   try {
     await Product.deleteOne({ _id: req.body.productId, userId: req.user._id });
