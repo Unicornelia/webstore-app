@@ -1,8 +1,11 @@
+import dotenv from 'dotenv';
 import Product from '../models/product';
 import Order from '../models/order';
 import Stripe from 'stripe';
 import { Request, Response } from 'express';
 import { CartItem } from '../../types';
+
+dotenv.config();
 
 const stripeSecret = process.env.STRIPE_SECRET_KEY || '';
 const stripe = new Stripe(stripeSecret);

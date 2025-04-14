@@ -9,7 +9,7 @@ import MongoDBStoreFactory from 'connect-mongodb-session';
 import csrf from 'csurf';
 import chalk from 'chalk';
 import flash from 'connect-flash';
-import mongooseConnect from './src/config/database';
+import mongooseConnect, { mongoDB_URI } from './src/config/database';
 import User from './src/models/user';
 import adminRoutes from './src/routes/admin';
 import shopRoutes from './src/routes/shop';
@@ -38,7 +38,7 @@ const PORT: number = Settings.PORT;
 // Initialize MongoDB store for sessions
 const MongoDBStore = MongoDBStoreFactory(session);
 const store = new MongoDBStore({
-  uri: process.env.MONGODB_URI || '',
+  uri: mongoDB_URI || '',
   collection: 'sessions',
 });
 

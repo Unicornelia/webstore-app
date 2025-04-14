@@ -1,3 +1,3 @@
 export enum Settings {
-  PORT = 4000,
+  PORT = 3001,
 }

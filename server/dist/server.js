@@ -1,4 +1,37 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -14,7 +47,7 @@ const connect_mongodb_session_1 = __importDefault(require("connect-mongodb-sessi
 const csurf_1 = __importDefault(require("csurf"));
 const chalk_1 = __importDefault(require("chalk"));
 const connect_flash_1 = __importDefault(require("connect-flash"));
-const database_1 = __importDefault(require("./src/config/database"));
+const database_1 = __importStar(require("./src/config/database"));
 const user_1 = __importDefault(require("./src/models/user"));
 const admin_1 = __importDefault(require("./src/routes/admin"));
 const shop_1 = __importDefault(require("./src/routes/shop"));
@@ -27,7 +60,7 @@ const PORT = settings_1.Settings.PORT;
 // Initialize MongoDB store for sessions
 const MongoDBStore = (0, connect_mongodb_session_1.default)(express_session_1.default);
 const store = new MongoDBStore({
-    uri: process.env.MONGODB_URI || '',
+    uri: database_1.mongoDB_URI || '',
     collection: 'sessions',
 });
 // Catch store related errors

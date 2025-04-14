@@ -4,9 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getOrders = exports.getCheckoutSuccess = exports.getCheckout = exports.postCartDeleteItem = exports.postCart = exports.getCart = exports.getProductDetail = exports.getProducts = exports.getIndex = exports.createPaymentIntent = void 0;
+const dotenv_1 = __importDefault(require("dotenv"));
 const product_1 = __importDefault(require("../models/product"));
 const order_1 = __importDefault(require("../models/order"));
 const stripe_1 = __importDefault(require("stripe"));
+dotenv_1.default.config();
 const stripeSecret = process.env.STRIPE_SECRET_KEY || '';
 const stripe = new stripe_1.default(stripeSecret);
 const getIndex = async (req, res) => {

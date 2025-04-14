@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && ts-node ./dist/server.js",
     "build": "tsc --w",
-    "dev": "nodemon ./dist/server.js --exec ts-babel-node -e js",
+    "dev": "nodemon ./dist/server.js",
     "format": "node_modules/.bin/prettier --write .",
     "lint": "node_modules/.bin/eslint . ",
     "lint:fix": "node_modules/.bin/eslint . --fix "
