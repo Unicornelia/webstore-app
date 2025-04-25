@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Home.css';
+import { Product } from '../types';
 
-const Home = () => {
-  const [products, setProducts] = useState([]);
+const Home: FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:3001', { credentials: 'include' })
@@ -17,7 +18,7 @@ const Home = () => {
       .catch((err) => console.error('Fetch error:', err));
   }, []);
 
-  const getRandomProducts = (products, count = 3) => {
+  const getRandomProducts = (products: Product[], count = 3) => {
     return [...products].sort(() => Math.random() - 0.5).slice(0, count);
   };
 
@@ -25,8 +26,12 @@ const Home = () => {
     <main className="home-container">
       <section className="hero">
         <h1>Welcome to Our Store</h1>
-        <p>Discover unique and high-quality products, handpicked just for you.</p>
-        <Link to="/products" className="btn">Shop Now</Link>
+        <p>
+          Discover unique and high-quality products, handpicked just for you.
+        </p>
+        <Link to="/products" className="btn">
+          Shop Now
+        </Link>
       </section>
 
       <section className="featured">
@@ -39,7 +44,9 @@ const Home = () => {
             </div>
           ))}
         </div>
-        <Link to="/products" className="btn secondary">View All Products</Link>
+        <Link to="/products" className="btn secondary">
+          View All Products
+        </Link>
       </section>
     </main>
   );

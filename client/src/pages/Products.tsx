@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 import '../css/Product.css';
 import AddToCart from '../components/AddToCart';
 import { useEffect, useState } from 'react';
+import { Product, Token } from '../types';
 
-const Products = ({csrfToken}) => {
-  const [products, setProducts] = useState([]);
+const Products = ({ csrfToken }: Token) => {
+  const [products, setProducts] = useState<Product[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -37,7 +38,9 @@ const Products = ({csrfToken}) => {
                 <Link to={`/products/${product._id}`} className="btn">
                   Details
                 </Link>
-                {isAuthenticated && <AddToCart productId={product._id} csrfToken={csrfToken} />}
+                {isAuthenticated && (
+                  <AddToCart productId={product._id} csrfToken={csrfToken} />
+                )}
               </div>
             </article>
           ))}

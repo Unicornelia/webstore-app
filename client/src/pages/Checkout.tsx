@@ -1,16 +1,18 @@
-import { useEffect, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Stripe, StripeElements } from '@stripe/stripe-js';
 import '../css/Checkout.css';
+import { Item } from '../types';
 
-const Checkout = () => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [total, setTotal] = useState(0);
-  const [checkoutItems, setCheckoutItems] = useState(0);
-  const [stripeSessionID, setStripeSessionID] = useState('');
+const Checkout: FC = () => {
+  const stripe: Stripe | null = useStripe();
+  const elements: StripeElements | null = useElements();
+  const [error, setError] = useState<string | undefined | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [total, setTotal] = useState<number>(0);
+  const [checkoutItems, setCheckoutItems] = useState<Item[] | null>(null);
+  const [stripeSessionID, setStripeSessionID] = useState<string>('');
 
   useEffect(() => {
     fetch('http://localhost:3001/checkout', { credentials: 'include' })
@@ -23,27 +25,31 @@ const Checkout = () => {
       .catch((e) => console.error(`Fetch error in checkout: ${e}`));
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !elements.getElement(CardElement)) {
       setError('Stripe is not loaded yet');
       setLoading(false);
       return;
     }
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: 'card',
-      card: elements.getElement(CardElement),
-    });
+    const cardElement = elements.getElement(CardElement);
+    if (cardElement) {
+      const { error } = await stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+      });
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+      } else {
+        setSuccess(true);
+        setError(null);
+      }
+
       setLoading(false);
-    } else {
-      setSuccess(true);
-      setError(null);
     }
-    setLoading(false);
   };
 
   return (
@@ -52,7 +58,7 @@ const Checkout = () => {
       <div>
         <ul className="cart__item-list">
           {checkoutItems
-            ? checkoutItems.map((item) => (
+            ? checkoutItems.map((item: Item) => (
                 <li key={item.product._id} className="cart__item">
                   <h1>{item.product.title}</h1>
                   <img
@@ -73,7 +79,7 @@ const Checkout = () => {
           id="order-btn"
           type="submit"
           onClick={() =>
-            stripe.redirectToCheckout({
+            stripe?.redirectToCheckout({
               sessionId: stripeSessionID,
             })
           }

@@ -22,7 +22,7 @@ import Checkout from './pages/Checkout';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-const stripePublicKey = process.env.REACT_APP_PUBLISHABLE_STRIPE_KEY;
+const stripePublicKey = process.env.REACT_APP_PUBLISHABLE_STRIPE_KEY || '';
 if (!stripePublicKey) {
   console.error('Missing Stripe public key!');
 }

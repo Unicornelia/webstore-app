@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { Key, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Cart.css';
+import { Item, ID, Token } from '../types';
 
-const Cart = ({ csrfToken }) => {
+const Cart = ({ csrfToken }: Token) => {
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState<Item[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:3001/cart', { credentials: 'include' })
@@ -13,7 +14,7 @@ const Cart = ({ csrfToken }) => {
       .catch((err) => console.error(err));
   }, []);
 
-  const handleDelete = async (productId) => {
+  const handleDelete = async (productId: ID) => {
     try {
       const response = await fetch('http://localhost:3001/cart-delete-item', {
         method: 'POST',
@@ -48,7 +49,7 @@ const Cart = ({ csrfToken }) => {
         <>
           <h1>Your Shopping Cart</h1>
           <ul className="cart__item-list">
-            {cartItems.map((item) => (
+            {cartItems.map((item: Item) => (
               <li key={item.product._id} className="cart__item">
                 <h1>{item.product.title}</h1>
                 <img

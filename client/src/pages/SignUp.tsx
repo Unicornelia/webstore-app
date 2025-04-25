@@ -1,22 +1,23 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/SignUp.css';
+import { Token } from '../types';
 
-const SignUp = ({ csrfToken }) => {
+const SignUp = ({ csrfToken }: Token) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | unknown>('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
@@ -37,15 +38,15 @@ const SignUp = ({ csrfToken }) => {
         alert('Successful signup!');
         navigate('/');
       }
-    } catch (err) {
-      setError(err.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : e);
     }
   };
 
   return (
     <main className="signup-container">
       <h2>Create an Account</h2>
-      {error && <p className="error">{error}</p>}
+      {error ? <p className="error">`${error.toString()}`</p> : null}
       <form className="signup-form" onSubmit={handleSubmit} noValidate>
         <div className="form-control">
           <label htmlFor="name">Name</label>

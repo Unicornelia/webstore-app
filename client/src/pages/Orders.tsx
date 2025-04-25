@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import '../css/Order.css';
+import { Order, Product } from '../types';
 
-const Orders = () => {
-  const [orders, setOrders] = useState([]);
+const Orders: FC = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:3001/orders', { credentials: 'include' })
@@ -12,7 +13,6 @@ const Orders = () => {
       })
       .catch((err) => console.error('Error fetching orders:', err));
   }, []);
-
 
   if (!orders) {
     return <h1>Loading...</h1>;
@@ -30,7 +30,11 @@ const Orders = () => {
             <div className="order-items">
               {order.products.map((product) => (
                 <div key={product.product.title} className="order-item">
-                  <img src={product.product.imageUrl} alt={product.product.title} className="order-item-image" />
+                  <img
+                    src={product.product.imageUrl}
+                    alt={product.product.title}
+                    className="order-item-image"
+                  />
                   <div className="order-item-info">
                     <h3>{product.product.title}</h3>
                     <p>Quantity: {product.quantity}</p>

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Product.css';
+import { ID, Product, Token } from '../types';
 
-const AdminProducts = ({ csrfToken }) => {
-  const [products, setProducts] = useState([]);
+const AdminProducts = ({ csrfToken }: Token) => {
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:3001/admin/products', { credentials: 'include' })
@@ -12,7 +13,7 @@ const AdminProducts = ({ csrfToken }) => {
       .catch((err) => console.error(`Error fetching products: ${err}`));
   }, []);
 
-  const handleDelete = async (productId) => {
+  const handleDelete = async (productId: ID) => {
     if (
       !window.confirm(
         `Are you sure you want to delete this product? ${productId}`
