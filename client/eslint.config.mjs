@@ -1,15 +1,32 @@
+import js from '@eslint/js';
 import globals from 'globals';
-import pluginJs from '@eslint/js';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
 
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  { languageOptions: { globals: globals.es2025 } },
-  { extends: ['react-app'] },
+export default tseslint.config(
+  { ignores: ['dist'] },
   {
-    plugins: {
-      eslintPluginPrettier,
-      pluginJs,
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      globals: globals.browser,
     },
-  },
-];
+    plugins: {
+      'react-hooks': reactHooks,
+      'react-refresh': reactRefresh,
+      prettier: eslintPluginPrettier,
+    },
+    rules: {
+      quotes: ['error', 'single'],
+      ...reactHooks.configs.recommended.rules,
+      'prettier/prettier': 'warn',
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  }
+);

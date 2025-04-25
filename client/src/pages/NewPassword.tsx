@@ -67,7 +67,7 @@ const NewPassword = ({ csrfToken }: Token) => {
       if (data.errorMessage?.length > 0) {
         setError(data.errorMessage);
       } else {
-        alert(`Your password has been updated successfully.`);
+        alert('Your password has been updated successfully.');
         navigate('/login');
       }
     } catch (e: unknown) {

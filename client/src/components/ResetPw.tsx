@@ -18,7 +18,10 @@ const ResetPw = ({ csrfToken }) => {
     try {
       const response = await fetch('http://localhost:3001/reset', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'CSRF-TOKEN': csrfToken },
+        headers: {
+          'Content-Type': 'application/json',
+          'CSRF-TOKEN': csrfToken,
+        },
         credentials: 'include',
         body: JSON.stringify(formData),
       });
@@ -27,7 +30,9 @@ const ResetPw = ({ csrfToken }) => {
       if (data.errorMessage?.length > 0) {
         setError(data.errorMessage);
       } else {
-        alert(`Got it! We sent an email to ${data.email}. Check your email and reset your password`);
+        alert(
+          `Got it! We sent an email to ${data.email}. Check your email and reset your password`
+        );
         navigate('/');
       }
     } catch (err) {
@@ -42,7 +47,15 @@ const ResetPw = ({ csrfToken }) => {
       <form onSubmit={handleSubmit} className="login-form">
         <div>
           <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} required autoComplete="off" />
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            autoComplete="off"
+          />
         </div>
         <button type="submit">Reset Password</button>
       </form>
