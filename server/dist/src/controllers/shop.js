@@ -30,12 +30,13 @@ const getProducts = async (req, res) => {
         res
             .status(200)
             .json({ products, isAuthenticated: req.session.isAuthenticated });
-        for (let item of products) {
-            console.log(item);
-        }
-        for (let itemPos in products) {
-            console.log(itemPos);
-        }
+        // for (let item of products) {
+        //   console.log(item);
+        // }
+        //
+        // for (let itemPos in products) {
+        //   console.log(itemPos);
+        // }
     }
     catch (e) {
         console.error(`Error in getProducts: ${e}`);
