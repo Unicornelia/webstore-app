@@ -3,9 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3001",
+  "scripts": {
+    "start": "webpack serve --mode=development",
+    "build": "webpack --mode=production",
+    "build:dev": "webpack --mode=development",
+    "test": "jest",
+    "lint": "eslint src"
+  },
   "dependencies": {
     "@testing-library/dom": "^10.4.2",
-    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/jest-dom": "^8.0.0",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.12",
     "eslint": "^10.15.0",
@@ -21,31 +28,6 @@
     "react-scripts": "5.0.1",
     "typescript-eslint": "^8.73.0",
     "web-vitals": "^6.2.3"
-  },
-  "scripts": {
-    "start": "webpack serve --mode=development",
-    "build": "webpack --mode=production",
-    "build:dev": "webpack --mode=development",
-    "test": "jest",
-    "lint": "eslint src"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "devDependencies": {
     "@babel/core": "^8.1.2",
@@ -68,5 +50,23 @@
     "webpack": "^5.112.2",
     "webpack-cli": "^7.3.1",
     "webpack-dev-server": "^6.1.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

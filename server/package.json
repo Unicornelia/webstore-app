@@ -2,15 +2,6 @@
   "name": "project",
   "version": "1.0.0",
   "main": "server.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && ts-node ./dist/server.js",
-    "build": "tsc --w",
-    "dev": "nodemon ./dist/server.js",
-    "format": "node_modules/.bin/prettier --write .",
-    "lint": "node_modules/.bin/eslint . ",
-    "lint:fix": "node_modules/.bin/eslint . --fix "
-  },
   "keywords": [],
   "author": "K",
   "license": "ISC",
@@ -20,14 +11,24 @@
     "url": "git+https://github.com/Unicornelia/node-project.git"
   },
   "engines": {
-    "node": "23.5.0"
+    "node": "^26"
   },
   "bugs": {
     "url": "https://github.com/Unicornelia/node-project/issues"
   },
   "homepage": "https://github.com/Unicornelia/node-project#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && ts-node ./dist/server.js",
+    "build": "tsc --w",
+    "dev": "nodemon ./dist/server.js",
+    "format": "node_modules/.bin/prettier --write .",
+    "lint": "node_modules/.bin/eslint . ",
+    "lint:fix": "node_modules/.bin/eslint . --fix "
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/body-parser": "^2.2.0",
     "@types/connect-flash": "^0.0.40",
     "@types/connect-mongodb-session": "^2.4.8",
     "@types/cookie-parser": "^1.4.10",
